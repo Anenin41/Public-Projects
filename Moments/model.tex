@@ -1,0 +1,118 @@
+% Section about the Black-Scholes Model %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Wed 19 Feb 2025 @ 17:11:32 +0100
+% Modified: Fri 21 Feb 2025 @ 19:08:56 +0100
+
+\section{Black-Scholes Model}
+\label{sec: model}
+The Black-Scholes model is one of the most widely used option pricing models in Finance. It provides a closed-form solution for the pricing of European options, by assuming that asset prices follow a geometric Brownian motion with constant volatility.
+
+However, real-world market conditions deviate from these assumptions, particularly in the presence of skewness and excess kurtosis in asset returns. In truth, the data almost never follow a strict Normal distribution, leading to the mispricing of options from the original model, due to the presence of higher order cumulants. This section tries to solve this problem, by introducing the Black-Scholes model, alongside its key components. Then, the Gram-Charlier expansion is applied to the default model, improving accuracy by accounting for deviations from normality.
+
+\subsection{General \& Market Related Notation}
+\begin{itemize}
+	\item $t$ is the time in years, with $t=0$ denoting the current year and the present date.
+	\item $r$ is the annualized risk-free rate, also known as the force of interest. This is generally unknown but can be calculated from complex financial models regarding the yield of treasury bonds. In general however, it is assumed to be $5\%$.
+\end{itemize}
+
+\subsection{Asset Related Notation}
+
+\begin{itemize}
+	\item $S(t)$ is the price of the underlying asset at time $t$. In this report the underlying asset is taken to be the stock of NVIDIA corporation.
+	\item $\mu$ is the drift rate of $S(t)$, annualized.
+\end{itemize}
+
+\begin{remark}
+	In many financial models, the stock price $S(t)$ is modelled by a time-dependent random variable, a construct that is also known as a stochastic process. Many financial models try to study the random fluctuations of stock prices, and in order to do so, almost all of them assume that the continuous stochastic process $S(t)$ follows a geometric Brownian motion.
+	The theory behind this model assumes that the natural logarithm of $S(t)$ follows a Brownian motion with drift $\mu$. Because calculating results from this setup requires really intricate knowledge of probability theory, statisticians found a way to calculate the drift rate of $S(t)$ by analyzing the mean daily returns of the stock (closing price of the stock today, minus the closing price of the stock yesterday) over a period of one year.
+\end{remark}
+
+\begin{itemize}
+	\item $\sigma$ is the standard deviation of a stock's returns, annualized, which is a measurement of the volatility of the stock. Mathematically this is given by a really complex formula, but can actually be approximated from market data.
+\end{itemize}
+
+\subsubsection{Volatility}
+One way to approximate the volatility of the stock is by using the market data \cite{cabrera}. Start by calculating the daily returns for day $t$.
+\[
+	r_t = \ln \left( \frac{P_t}{P_{t-1}} \right)
+\]
+where $P_t, P_{t-1}$ is the closing price of the stock on day $t$ and $t-1$ respectively.
+
+The standard deviation $\sigma$ of the daily returns is given by:
+\[
+	\sigma_{\text{daily}} = \sqrt{ \frac{1}{n-1} \sum_{t=1}^{n} (r_t - \bar{r})^2}
+\]
+where $r_t$ is the return on day $t$, $\bar{r}$ is the average return over the period of $n$ number of days.
+
+In order to annualize the volatility, people often use the formula:
+\[
+	\sigma_{\text{annual}} = \sigma_{\text{daily}} \times \sqrt{252}
+\]
+where 252 are usually the trading days in a year. The annual volatility represents the expected standard deviation of the stock over a year.
+
+\subsection{Option Related Notation}
+
+\begin{itemize}
+	\item $V \left( S(t),t \right)$ is the price of the option as a function of the stock price at time $t$. More specifically:
+		\begin{itemize}
+			\item $C \left( S(t),t \right)$ is the price of the European call option.
+			\item $P \left( S(t),t \right)$ is the price of the European put option.
+		\end{itemize}
+	\item $T$ is the time of expiration of the option.
+	\item $\tau$ is the time until maturity $T-t$, or how long until the option expires.
+	\item $K$ is the strike price of the option.
+\end{itemize}
+
+\begin{remark}
+	In finance an option is a \textbf{contract} which conveys to its owner the right, but not the obligation, to buy or sell a specific quantity of stock at a specified strike price on, or before a specified date.
+	The strike price is a fixed value at which the owner of a stock can buy or sell the stock.
+\end{remark}
+
+As a direct observation from what options are, it is evident that option contracts can \textbf{expire}. In addition, they are categorized into \textbf{call options} contracts to buy an amount of stock, and \textbf{put options} contracts to sell an amount of stock.
+
+\subsection{Black-Scholes Equation}
+The Black-Scholes \cite{black1973pricing} equation is a parabolic partial differential equation that describes how the price of the option fluctuates in time, in regard to the stock price $S(t)$. For terminal condition (regarding the expiration date of the option), and boundary conditions, this Stochastic Differential Equation can be solved.
+
+\[ 
+	\frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + r S \frac{\partial V}{\partial S} - rV = 0
+\]
+
+\subsubsection{Boundary Conditions}
+\hspace{\parindent}If the stock price reaches zero (meaning that the company goes bankrupt), then there is no saving the company.
+\[ 
+	C(0,t) = 0 \,\,\,\, \forall t
+\]
+
+As the stock price grows arbitrarily over time, then the call option goes to $S-K$.
+\[
+	C(S(t),t) \to S-K \text{ as } S \to \infty
+\]
+
+At the time of expiration, the call option returns some profit or nothing at all, meaning that the investor can't go into dept for not exercising the option (if the prerequisites of the contract are not met, or if the contract expires).
+\[
+	C(S(T), T) = \max(S-K, 0)
+\]
+
+\subsubsection{Solution}
+Using these boundary conditions, the solution of the Black-Scholes equation has the following form.
+
+\begin{gather*}
+	C(S(t),t) = \Phi(d_{+})S(t) - \Phi(d_{-})Ke^{-r(T-t)} \\
+	d_{+} = \frac{1}{\sigma \sqrt{ T - t}} \left[ \ln\left( \frac{S(t)}{K} \right) +\left( r+\frac{\sigma^2}{2} \right)(T-t) \right] \\	
+	d_{-} = d_{+} - \sigma \sqrt{ T-t }
+\end{gather*}
+where $\Phi(\cdot)$ is the CDF of the Normal Distribution.
+
+By this formulation and solution, it is clear that the Black-Scholes model assumes that the returns (the profit of investment) are normally distributed. This is a nice mathematically because most probabilistic and statistic results reference in some way the Normal Distribution. However, such an assumption is mostly inaccurate.
+
+The reason why this scenario is far-fetched is because the Normal Distribution has no skewness and kurtosis (since all higher order moments/cumulants are zero). That means that the profits of the investment always follow a symmetric distribution, with no slender or fat tail. In the opposite, real market data often showcase asymmetry and slender, or fat, tails.
+
+As such, the Black-Scholes model underestimates option prices for highly skewed assets. Moreover, it also fails to capture the probability of extreme market movement. This is more evident for volatile stocks, meaning stocks that wildly fluctuate between values. The stock price of the NVIDIA Corporation is a prime example of these features.
+
+In order to correct this bad behaviour, and to make a more appropriate fitting in the market data that is widely available, the Gram-Charlier expansion is introduced into the Black-Scholes model. This adjustment corrects the model and allows it to take into consideration higher order cumulants that cannot be discarded in the data, while also improving option pricing. Overall, this leads to a more accurate model, which maintains the usefulness of the original Black-Scholes as its foundation.
+
+\begin{gather*}
+	C_{\text{MoM}} = C_{\text{BS}} + \text{ Adjustments for Skewness and Kurtosis} \\
+	C_{\text{MoM}} = C_{\text{BS}} \, \times \, \left[ 1 + \frac{\kappa_{3}}{3!} \text{He}_{3}(d_{+}) + \frac{\kappa_{4}}{4!} \text{He}_{4}(d_{+}) \right]
+\end{gather*}

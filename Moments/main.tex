@@ -1,0 +1,163 @@
+% Modified final report from Model Reduction for LinkedIn %
+% Author: Konstantine Gkaras
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Sat 19 Oct 2024 @ 00:30:12 +0200
+% Modified: Fri 21 Feb 2025 @ 20:37:52 +0100
+
+\documentclass{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%-----------------------PAGE SETTINGS----------------------------%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[utf8]{inputenc}
+\usepackage[margin=0.01cm]{geometry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%--------------------------PREAMBLE------------------------------%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{pdfpages}                           % Insert PDF into file without breaking margins and print output.
+\usepackage{anyfontsize}                        % Use any font size.
+\usepackage{setspace}                           % Customize paragraph spacing.
+\usepackage{mathtools}                          % Math typing.
+\usepackage{cancel}                             % Strikethrough text.
+\usepackage{float}                              % Force figure on position.
+\usepackage[hidelinks]{hyperref}	            % Links.
+\usepackage{amsmath}                            % Math typing.
+\usepackage{inputenc}                           % Special characters.
+\usepackage{amsfonts}                           % Fontpack.
+\usepackage{graphicx}                           % Graphics.
+\usepackage{enumitem}                           % Special numerisation on lists.
+\usepackage{amsthm}                             % Math.
+\usepackage{xcolor}                             % Colors.
+\usepackage{lipsum}                             % Dummy text.
+\usepackage{url}								% Url's.
+\usepackage{lmodern}							% Latin Modern for Computer Fonts.
+\usepackage{textcomp}							% Special symbols like degrees or euro.
+\usepackage{listings}							% Input code directly from file or path.
+\usepackage{pdfpages}							% Include pdf documents in the output file.
+\usepackage{amssymb}							% Math.
+\usepackage{tikz}								% Drawing plots.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%-----------------------CUSTOM COMMANDS--------------------------%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\textBF}[1]{%
+    \pdfliteral direct {2 Tr 1 w}               %the second factor is the boldness
+     #1%
+    \pdfliteral direct {0 Tr 0 w}               %
+}
+
+\newcommand{\textDF}[1]{%
+    \pdfliteral direct {2 Tr 0.2 w}             %the second factor is the boldness
+     #1%
+    \pdfliteral direct {0 Tr 0 w}               %
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% Define the abs() function
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+
+% Define the norm() function
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+
+% Define the inner product using angle brackets
+\newcommand{\inner}[2]{\left\lange #1, #2 \right\rangle}
+
+% Define the argmin operator
+\DeclareMathOperator*{\argmin}{argmin}
+
+% Define the dist operator
+\DeclareMathOperator*{\dist}{dist}
+
+% Define the resolvent operator
+\DeclareMathOperator{\res}{Res}
+
+% Define the proximal operator
+\DeclareMathOperator*{\prox}{prox}
+
+% Redefine the proof environment to be completely silent
+\renewenvironment{proof}%
+{\noindent}%
+{\hfill$\square$\par}
+
+% Start section counter from 0
+%\setcounter{section}{-1}
+
+% Define the Remark environment
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%-----------------------DOCUMENT BEGIN---------------------------%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{titlepage}
+\thispagestyle{empty}
+\title{
+\includegraphics[width=19cm]{Extras/Mathlogo.PNG} \\
+\vspace{3cm}
+\begingroup
+\setstretch{4}\fontsize{25}{10}\selectfont\fontdimen2\font=0.8ex
+% Project Title  %
+% If you want the title centered, leave the command as it is, 
+% otherwise delete the \center{} command.
+\parbox{15cm}{\center{\textBF{Enhancing Black-Scholes Option Pricing: A Method of Moments Approach}}}
+\endgroup}
+\date{}
+\maketitle
+\vspace{-1.5cm}
+\hspace{3cm}\parbox[b][15cm][b]{15cm}{\textDF{\large\setstretch{1.5}
+Report under the course of Model Reduction for Partial Differential Equations \\
+\date{October 24, 2024}\\
+Author: Konstantinos Gkaras\\ %NAME
+Contact Information: \href{mailto: kgaras041@gmail.com}{kgaras041@gmail.com}
+}}
+\end{titlepage}
+\newpage
+% Define new page geometry because the default was changed for title page.
+\newgeometry{top=1in,bottom=1in,right=1in,left=1in}
+
+% Input the abstract into the document.
+\input{abstract.tex}
+
+% Table of contents
+%\tableofcontents
+
+% Input document sub-files, following the divide and conquer strategy.
+\input{intro.tex}			% Introduction
+\input{ansatz.tex}			% Ansatz & Gram-Charlier
+\input{model.tex}			% Black-Scholes Model
+\input{application.tex}		% Application
+
+% Manage references and plug them into the table of contents.
+\addcontentsline{toc}{section}{References}
+\bibliographystyle{unsrt}
+\bibliography{/home/anenin/Documents/Projects/LaTeX/templates/article/references.bib}
+
+\end{document}

@@ -1,0 +1,13 @@
+% Introduction to the modified final report about MoM in Finance %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Wed 19 Feb 2025 @ 17:27:01 +0100
+% Modified: Wed 19 Feb 2025 @ 18:57:14 +0100
+
+\section{Introduction}
+\label{sec: intro}
+
+The Black-Scholes model \cite{black1973pricing} is one of the most widely used mathematical frameworks for pricing European options. By assuming that asset prices follow a geometric Brownian motion, and that asset returns are normally distributed, the model provides a closed-form solution for option valuation. However, real-life market data are asymmetric, in the sense that they often exhibit skewness and excess kurtosis, not assumed by the original model.
+
+The presence of these statistical characteristics means that the Black-Scholes model misprices options. Capitalizing on this feature, this report enhances the pricing scheme by introducing corrections using the Method of Moments and the Gram-Charlier expansion \cite{wallace1958asymptotic}. By incorporating higher order moments to the probability density function, an adjustment is made to the model to account for non-normal market behavior, overall resulting in a more accurate representation of option prices.
+

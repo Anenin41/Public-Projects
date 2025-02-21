@@ -1,0 +1,66 @@
+% Section about the Application of the Model to a Real-Life Example %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Wed 19 Feb 2025 @ 17:12:10 +0100
+% Modified: Fri 21 Feb 2025 @ 20:44:50 +0100
+
+\section{Application}
+\label{sec: application}
+To showcase that this new model actually performs as desired, a practical application is also introduced. Here, a direct comparison takes place between the original and adjusted Black-Scholes models, following semi-real market data that satisfy the assumptions of the previous section.
+
+As it has been discussed in the previous section, that the core assumption the Black-Scholes model makes is normality. However, in the following tables, a comparison is being made between the original model and the Method of Moments adjusted one. A common baseline was used in the calculations. More specifically, the stock price is \( S(t) = \text{\texteuro} 137.29 \), and the time of maturity of the \textbf{call option} is 2 years, and the tables were generated using code from \cite{githubrepo}.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Strike Price (\texteuro) & Time to Maturity (Years)	& Black-Scholes (\texteuro)	& MoM Black-Scholes (\texteuro)	& Difference \\
+		\hline
+		45 & 2 & 96.65 & 96.65 & 0 \% \\
+		50 & 2 & 92.21 & 92.21 & 0 \% \\
+		60 & 2 & 83.49 & 83.49 & 0 \% \\
+		\hline
+	\end{tabular}
+	\caption{The difference in performance between the two models, assuming normality.}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Strike Price (\texteuro) & Time to Maturity (Years)	& Black-Scholes (\texteuro)	& MoM Black-Scholes (\texteuro)	& Difference \\
+		\hline
+		45 & 2 & 96.65 & 97.28 & 0.65 \% \\
+		50 & 2 & 92.21 & 93.41 & 1.30 \% \\
+		60 & 2 & 83.49 & 85.92 & 2.91 \% \\
+		\hline
+	\end{tabular}
+	\caption{The difference in performance between the two models, assuming \(\text{Skew} = -0.5, \text{Kurt} = 4 \).}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Strike Price (\texteuro) & Time to Maturity (Years)	& Black-Scholes (\texteuro)	& MoM Black-Scholes (\texteuro)	& Difference \\
+		\hline
+		45 & 2 & 96.65 & 98.55 & 1.97 \% \\
+		50 & 2 & 92.21 & 95.81 & 3.90 \% \\
+		60 & 2 & 83.49 & 90.78 & 8.73 \% \\
+		\hline
+	\end{tabular}
+	\caption{The difference in performance between the two models, assuming \(\text{Skew} = -1.5, \text{Kurt} = 6 \).}
+\end{table}
+
+By observing the numerical results on the table, it is noticeable that the corrected model predicts slightly higher option prices than the default one. This is because excess skewness and kurtosis are introduced to the data. Moreover, the impact of corrections increases as skewness and kurtosis deviate further from normality, a behaviour which indicates that the standard Black-Scholes model under-estimates option prices.
+
+Lastly, it is evident from this simple example that the difference between the values remains moderate. Such a change might not seem like much, but it is highly significant for high-value contracts. 
+
+To conclude this report, first I would like to thank you for the time that you devoted in studying my work. In addition some direct implications can also be formulated for the corrected model.
+
+\begin{itemize}
+	\item Using the corrected model, investors, who have a much higher intuitive understanding on the mechanisms of the market, can use this model to better predict how their strategies will perform.
+	\item The Method of Moments Black-Scholes model ensures option prices that reflect real world tail behaviour. It can be even further improved mathematically, by using the Log-Normal distribution as the basis of the Gram-Charlier expansion, a distribution which has higher order moments, and would actively correct all of the statistically important terms of the approximation.
+	\item Adjusting the model for real-world distributions helps maintain fair pricing in the market. I wouldn't be surprised if journals that focus on finance use derivations of the Black-Scholes model to correctly fit their data into predictive strategies.
+\end{itemize}
+
