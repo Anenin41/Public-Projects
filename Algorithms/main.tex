@@ -1,0 +1,422 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND THEMES
+%----------------------------------------------------------------------------------------
+\documentclass[aspectratio=169,xcolor=dvipsnames, t]{beamer}
+\usepackage{fontspec}											% Allows using custom font. MUST be before loading the theme!
+\usetheme{SimplePlusAIC}										% Custom font.
+\usepackage{hyperref}											% Hyper links and cross referencing.
+\usepackage{graphicx}											% Allows including images.
+\usepackage{booktabs}											% Allows the use of \toprule, \midrule and  \bottomrule in tables.
+\usepackage{svg}												% Allows using svg figures.
+\usepackage{tikz}												% Create graphics using the tikz package.
+\usepackage{makecell}											% Modification on tabular environment.
+\usepackage{wrapfig}											% Wrap text around figure.
+% ADD SPECIFIC PACKAGES BELOW
+\usepackage{mathtools}											% Math typing.
+\usepackage{cancel}												% Strikethrough text.
+\usepackage{float}												% Force figure on position.
+\usepackage{amsmath}											% Math typing.
+\usepackage{inputenc}											% Special characters.
+\usepackage{amsthm}												% Math typing.
+\usepackage{xcolor}												% Colors.
+\usepackage{lipsum}												% Dummy text.
+\usepackage{lmodern,textcomp}									% Euro symbol.
+\usepackage{ragged2e}											% Justifying text.
+\usepackage{tabularx}											% Auto-resizing of tables to fit the page.
+% ADD CUSTOM COMMANDS BELOW	
+\apptocmd{\frame}{}{\justifying}{}								% Allow optional arguments after frame.
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE CONFIGURATION
+%----------------------------------------------------------------------------------------
+
+\title{The Travelling Salesman Problem} % The short title appears at the bottom of every slide, the full title is only on the title page
+\subtitle{An introduction to one of the most famous discrete optimization problems}
+
+\author{Konstantinos Gkaras}
+\institute[University of Groningen, Faculty Science and Engineering]{Faculty Science and Engineering
+\newline
+University of Groningen
+}
+% Your institution as it will appear on the bottom of every slide, maybe shorthand to save space
+
+
+\date{January 15, 2025} % Date, can be changed to a custom date
+%----------------------------------------------------------------------------------------
+%	PRESENTATION SLIDES
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitlepage
+
+\begin{frame}[t]{Table of Contents}
+	\vspace{-5mm}
+%    % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
+    \tableofcontents
+\end{frame}
+
+
+%------------------------------------------------
+% Slide 1: Introduction
+\section{Problem Statement}
+\begin{frame}[noframenumbering]{The Travelling Salesman Problem} 
+	\vspace{-5mm}
+	Given a list of cities in a country, and the distance between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?
+	\vspace{1mm}
+	\begin{itemize}
+		\item<2-> How to study this problem?
+		\item<3-> Using graph theory!
+	\end{itemize}
+	\begin{block}<4->{Travelling Salesman Problem in Graph Theory}
+		The travelling salesman problem can be modeled as an undirected weighted graph \( G(V, E) \). It is a minimization problem that searches for an optimal route, starting and finishing at a specified node, after having visited each other node of the graph exactly once. The minimization is done in terms of the cost function that measures the overall distance travelled.
+	\end{block}
+\end{frame}
+
+%------------------------------------------------
+% Slide 2: Graph Theory Formulation Explanation
+\section{Graph Theory Preliminaries}
+\begin{frame}[noframenumbering]{Graph Theory Preliminaries}
+	\vspace{-5mm}
+	\begin{itemize}
+		\item<2-> \( V: \) The set of the nodes of the graph, in this case, each node represents a city and can be, for example, a set of coordinates.
+		\item<3-> \( E: \) The set of edges of the graph, with each one simulating a road that connects to cities \(i\) and \( j\).
+		\item<4-> Undirected: The graph's edges don't point towards specific directions.
+		\item<5-> Weighted: Each edge is characterized by a number which denotes the distance between two cities.
+		\item<6-> Cost Function: Measures the overall distance covered in a route.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 3: Graph Theory Assumptions
+\begin{frame}{Graph Theory Preliminaries}
+	\vspace{-5mm}
+	\onslide<1->\begin{block}{Assumption}
+		The graph is considered to be complete, meaning that all cities are interconnected via roads and appropriate distances.
+	\end{block}
+
+	\onslide<2->\begin{alertblock}{Remark}
+		It has been proven in graph theory that if a graph isn't complete, then by adding a sufficiently long edge (i.e. building a road between two cities), the optimal tour is not effected.
+	\end{alertblock}
+
+	\begin{itemize}
+		\item<3-> How to solve this problem?
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 4: Factorial Growth
+\section{Brute Force Attempt}
+\begin{frame}{Brute Force Attempt}
+	\vspace{-5mm}
+	The TSP is deceptively simple to state, but incredibly challenging to solve efficiently.
+	\begin{itemize}
+		\item<2-> The reason?
+		\item<3-> Factorial Growth!
+	\end{itemize}
+
+	\onslide<4->\begin{block}{Example}
+		Let's assume a complete graph \( G(V, E) \) with 4 cities. The number of possible tours is \( 3! = 6 \).
+		\begin{itemize}
+			\item<5-> \( 10 \) cities, \( 9! = 362,880 \) possible tours.
+			\item<6-> \( 50 \) cities, \( 49! \approx 10^{64} \) possible tours.
+			\item<7-> \( n \) cities, \( (n - 1)! \) possible tours.
+		\end{itemize}
+		\onslide<8->The Netherlands comprises of 229 cities in total.
+	\end{block}
+
+	\onslide<9->\textbf{Result:} Brute force applications are impossible to solve for real life scenarios.
+\end{frame}
+
+%------------------------------------------------
+% Slide 5: NP-Hardness
+\section{NP-Hardness}
+\begin{frame}{Hidden Difficulty of TSP}
+	\vspace{-5mm}
+	\onslide<1->This simple question has such a difficult solution because of the mathematical structure of the problem. More specifically, the Travelling Salesman Problem belongs to the class of NP-Hard problems.
+	
+	\onslide<2->\begin{block}{NP Class}
+		In computational complexity we have categorized problems into classes in order to study them. NP class, which stands for Non-deterministic Polynomial time, contains the problems which can be solved in polynomial time by non-deterministic Turing Machines.
+	\end{block}
+
+	\onslide<3->\begin{alertblock}{Remark}
+		In this classification, it doesn't matter how much time it takes for the problem to be solved. As such, the NP class contains problems that take as much time to compute as the lifespan of the human race.
+	\end{alertblock}
+\end{frame}
+
+%------------------------------------------------
+% Slide 6: NP-Hardness 2
+\begin{frame}{Examples of NP Problems}
+	\vspace{-5mm}
+	\begin{itemize}
+		\item<2-> Minimization of convex and L-smooth functions, are in the NP class, because we can solve such optimization problems in polynomial time.
+		\item<3-> Calculating the invertible of a matrix \( A \), (if it exists) can be done in polynomial time.
+		\item<4-> Estimating the parameters of a probability distribution by maximizing the likelihood function (MLE) can be solved in polynomial time.
+	\end{itemize}
+
+	\onslide<5->Due to the nature of most computational problems, the NP class is further partitioned into subclasses.
+	\begin{itemize}
+		\item<6-> \textbf{NP-easy:} At most as hard as the problems in NP, but not necessarily in NP.
+		\item<7-> \textbf{NP-complete:} Set which contains the hardest problems in NP.
+		\item<8-> \textbf{NP-Hard:} Class of problems which are at least as hard as the hardest problem in NP. Not necessarily elements in NP, and some might not even be decidable.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 7: NP-Hardness 3
+\begin{frame}{P \( \neq \) NP?}
+	\vspace{-5mm}
+	\begin{figure}
+		\includegraphics[height=0.6\paperheight]{figures/P_NP.png}
+		\caption{Diagram which visualises the differences between various complexity classes.}
+	\end{figure}
+\end{frame}
+
+%------------------------------------------------
+% Slide 8: Why is TSP NP-Hard?
+\begin{frame}{Why is TSP NP-Hard?}
+	\vspace{-5mm}
+	Using the graph formulation of the Travelling Salesman Problem, I will sketch the proof that TSP is NP-Hard. The general idea is to reduce the problem to an already known NP-Hard problem.
+
+	\onslide<2->\begin{block}{Hamiltonian Cycle Problem (\( \in \) NP-Complete)}
+		Given a graph \( G(V, E) \), does there exist a cycle that visits every node exactly once?
+	\end{block}
+
+
+	\onslide<3->\textbf{Proof}
+		\begin{itemize}
+			\item<4-> Start with the graph \( G(V, E) \) from the HCP instance.
+			\item<5-> Create a complete graph \( G'(V, E') \), where every pair of nodes in \( V \) is now connected.
+			\item<6-> Assign weights to the edges of \( G' \).
+				\begin{itemize}
+					\item<7-> if the edge exists, assign weight of 1.
+					\item<8-> if the edge doesn't exists, assign a large number \(M > 1\).
+				\end{itemize}
+%			\item Solve the TSP on \( G' \).
+%				\begin{itemize}
+%					\item if the Hamiltonian Cycle exists in \( G \), then the TSP tour in \( G' \) will have total cost equal to \( |V| \).
+%					\item if there is no Hamiltonian Cycle in \( G \), then the TSP tour in \( G' \) will result in cost greater than \( |V| \).
+%				\end{itemize}
+		\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 9: Why is TSP NP-Hard? 2
+\begin{frame}{Why is TSP NP-Hard?}
+	\vspace{-5mm}
+	\textbf{Proof}
+	\begin{itemize}
+		\item<2-> Solve the TSP on \( G' \).
+			\begin{itemize}
+				\item<3-> if a Hamiltonian Cycle exists in \( G \), then the TSP tour in \( G' \) will have total cost equal to \( |V| \), which corresponds to visiting each node exactly once, using only edges from \( G	\) (all old edges have weight 1).
+				\item<4-> if there is no Hamiltonian Cycle in \( G \), then any TSP tour in \( G' \) will necessarily use one or more edges with weight M, resulting in cost greater than \( |V| \).
+			\end{itemize}
+	\end{itemize}
+
+	\onslide<5->\textbf{Conclusion}
+	Since the Hamiltonian Cycle Problem is a NP-Complete problem, thus being in the NP-Hard class, it follows that the Travelling Salesman Problem is an NP-Hard problem.
+
+	\begin{itemize}
+		\item<6-> How to solve?
+		\item<7-> Using a clever iterative algorithm.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 10: Iterative Algorithm Solution
+\section{Ant Colony Optimization}
+\begin{frame}{Ant Colony Optimization}
+	\vspace{-5mm}
+	\onslide<2->The Ant Colony Optimization iterative algorithm solves the Travelling Salesman Problem in \( \mathcal{O}(T \cdot m \cdot n^2) \) time.
+
+	\begin{itemize}
+		\item<3-> \( T \) is the number of iterations.
+		\item<4-> \( m \) is the number of artificial ants that the algorithm uses.
+		\item<5-> \( n \) is the number of cities (graph nodes).
+	\end{itemize}
+
+	\onslide<6->\textbf{How does it work?}
+	\begin{itemize}
+	\item<7-> By simulating the behavior of an ant colony searching for food.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 11: Intuitive Explanation of ACO
+\begin{frame}{Step-by-Step Explanation}
+	\vspace{-5mm}
+	\onslide<2->\begin{block}{Intuitive Explanation}
+		\begin{itemize}
+			\item<2-> Place multiple artificial ants on different cities (the nodes of the graph).
+			\item<3-> Assign a pheromone number to each road. This number dictates how likely the ants are to pass through the road while traversing the graph in search for food.
+			\item<4-> Each ant then builds its own specific tour of the graph, travelling to each city once, and returning to their starting point.
+			\item<5-> Out of all the tours that the ants performed, choose the best (in terms of least distance travelled), which is also the optimal tour that I am searching for.
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+%------------------------------------------------
+% Slide 11: Ant Colony Algorithm Presentation
+\section{Ant Colony Algorithm Implementation}
+\begin{frame}{Algorithm Implementation}
+	\vspace{-5mm}
+	\onslide<2->\begin{block}{Step-by-Step Guide}
+		\begin{enumerate}
+			\item<2-> Start with graph \( G(V, E) \).
+			\item<3-> Assign a pheromone number on each edge. This number should be small at first, in order for the algorithm to be initialized correctly.
+			\item<4-> Place the digital ants to different nodes, and define a rule through which they randomly choose which city to visit on the next step.
+				\[
+					P_{i,j} = \frac{\tau_{i,j}^{\alpha} \cdot \eta_{i,j}^{\beta}}{\sum_{k \in \text{allowed}} \tau_{i,k}^{\alpha} \cdot \eta_{i,k}^{\beta}}
+				\]
+		\end{enumerate}
+	\end{block}
+\end{frame}
+
+%------------------------------------------------
+% Slide 12: Ant Colony Algorithm Presentation 2
+\begin{frame}{Algorithm Implementation}
+	\vspace{-5mm}
+	\onslide<2->\begin{block}{Step-by-Step Guide}
+		\begin{enumerate}
+			\setcounter{enumi}{3}
+			\item<2-> After all ants complete their tours, update the \textit{pheromone trails} in order for the ants to not get stuck on certain routes.
+				\[
+					\tau_{i,j} = (1 - \rho) \cdot \tau_{i, j} + \Delta \tau_{i,j} 
+				\]
+			\item<3-> Enforce a stopping criterion. This can be a limit to the total iterations performed, or a way to measure if the solution has improved or not.
+			\item<4-> The optimal solution is derived by tracking each ant, and finding the shortest route across all iterations of the algorithm.
+		\end{enumerate}
+	\end{block}
+\end{frame}
+
+%------------------------------------------------
+% Slide 12: Algorithm Parameter Explanation
+\section{Parameter Definitions}
+\begin{frame}{Parameter Explanation}
+	\vspace{-10mm}
+	\[
+		P_{i,j} = \frac{\tau_{i,j}^{\alpha} \cdot \eta_{i,j}^{\beta}}{\sum_{k \in \text{allowed}} \tau_{i,k}^{\alpha} \cdot \eta_{i,k}^{\beta}}
+	\]
+	\begin{itemize}
+		\item<2-> \( \tau_{i,j} \) is the \textbf{pheromone level} of the edge \( (i,j) \). This parameter assigns a number to each edge and directly influences the probability of the ants choosing this road for their next trip. It is an inner mechanism of the algorithm.
+		\item<3-> \( \eta_{i,j} \) is the \textbf{heuristic desirability} of the edge \( (i,j) \). This parameter measures how much the ants like the edge \( (i, j) \). This can be modified to fit our needs, but a usual choice is \( 1 / d_{i,j} \) where \(d_{i,j}\) is the distance between two cities.
+		\item<4-> \( \alpha \) is a parameter which influences the importance of the pheromone trail in the search.
+		\item<5-> \( \beta \) is a parameter which influences the importance of the heuristic information in the search, i.e., how much the ants take into consideration their feelings for what road to choose.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 13: Algorithm Parameter Explanation 2
+\begin{frame}{Parameter Explanation}
+	\vspace{-10mm}
+	\[
+		\tau_{i,j} = (1 - \rho) \cdot \tau_{i, j} + \Delta \tau_{i,j} 
+	\]
+	\vspace{-1mm}
+	\begin{itemize}
+		\item<2-> \( \rho \) is the \textbf{evaporation rate}. This parameter controls how quickly the pheromones decay over time. It is extremely important to define this appropriately in order to avoid making all the edges look equally attractive to the artificial ants. Moreover, it allows the ants to explore different paths, by discouraging over-exploitation of specific routes.
+		\item<3-> \( \Delta \tau_{i,j} \) is the amount of pheromones deposited by the ants on edge \( (i,j) \). 
+			\[
+				\Delta \tau_{i,j} = \sum_{\text{ants}} \frac{Q}{L}
+			\]
+		\item<4-> \( Q \): a predetermined constant (usually 1) which controls how much pheromone is deposited on the edges of the route.
+		\item<5-> \( L \): total length (\textbf{cost}) of the tour.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 14: Advantages & Limitations
+\section{Advantages \& Limitations}
+\begin{frame}{ACO Advantages \& Limitations}
+	\vspace{-5mm}
+	\onslide<2-> \textit{Advantages}
+	\begin{itemize}
+			\item<3-> \textbf{Scalable.} The algorithm can scale accordingly, to a large number of cities.
+			\item<4-> \textbf{Robust.} Variations of the Travelling Salesman Problem (for example introduction to dynamic elements like traffic congestion) are taken into consideration by manipulating parameters \( \alpha, \beta, \rho \).
+			\item<5-> \textbf{Adaptability.} The algorithm can be easily modified to solve multi-objective or constrained TSPs.
+			\item<6-> \textbf{Distributed.} Finding the optimal route is distributed amongst many agents. Each ant builds each own solution, and then it's up to the user to pick which one they like best.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide: 15: Advantages & Limitations 2
+\begin{frame}{ACO Advantages \& Limitations}
+	\vspace{-5mm}
+	\onslide<2-> \textit{Limitations}
+	\begin{itemize}
+			\item<3-> \textbf{Computational Costs.} It is evident that this algorithm may be slow for very large instances of the TSP. However, it can be parallelized.
+			\item<4-> \textbf{Parameter Sensitivity.} The algorithm's performance is directly impacted by the user defined parameters.
+			\item<5-> \textbf{Local Optima.} Without a decent diversification strategy (e.g. poor exploration rules), the algorithm might loop prematurely in subsets of the graph, getting stuck in local optima.
+			\item<6-> \textbf{Stochastic Nature.} Solutions are not deterministic for large instances of the TSP. Running the algorithm multiple times can yield different results.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 15: Comparison with other algorithms
+\section{Comparison}
+\begin{frame}{Comparison with other Algorithms}
+	\vspace{-5mm}
+	\begin{itemize}
+		\item<2-> Ant Colony Optimization depends on many agents and probability to find the optimal route. Because of this, the algorithm is considered to be an approximation algorithms.
+		\item<3-> For large instances of the TSP (e.g. 100-500 cities), the ACO algorithm finds solutions that are within \( 1 - 3\% \) of the optimal solution.
+		\item<4-> For extremely large instances of the TSP (e.g. thousands of cities), the ACO algorithm can still deliver high quality solutions but with diminishing accuracy relative to the best-known solutions of direct solvers.
+		\item<5-> Apart from the most advanced algorithms, ACO  performs really well both in terms of accuracy and time complexity. 
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 16: Applications of TSP
+\section{Applications of TSP}
+\begin{frame}{Applications of TSP}
+	\vspace{-5mm}
+	\begin{itemize}
+		\item<2-> \textbf{Logistics.} Companies like DHL, FedEx and many more need optimized routes between addresses for parcel delivery. One such way to retrieve said routes is by solving the TSP.
+		\item<3-> \textbf{Fiber Optic Network Design.} The energy of light travelling down on optical fiber cables decays over distance. As such, network speed is affected, and the problem of correctly laying down these cables is effectively the same as solving TSP.
+		\item<4-> \textbf{Data Routing.} The question of how to correctly route data to different processing clusters is of great concern to Google. The task at hand here is to move data between mega-servers in the most efficient way, optimizing both for distance and for the data center's computational resources.
+		\item<5-> \textbf{Genome Sequencing \& Pattern Matching.} Assembling DNA sequences and matching them to patterns are generalizations of the Travelling Salesman Problem in Biology.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 17: Conclusion
+\begin{frame}{Summary}
+	\vspace{-5mm}
+	\begin{itemize}
+		\item<2-> The Travelling Salesman Problem is extremely important for many scientific fields, but very difficult to solve efficiently due to factorial growth.
+		\item<3-> The Travelling Salesman Problem is one of the most complex problems we know of today, and it has many generalizations, all of which are in the NP-Hard class.
+		\item<4-> The Ant Colony Optimization algorithm is one of many iterative algorithms that tackle this problem. However it is a good algorithm to implement for users without a lot of background in graph theory, or computer science.
+		\item<5-> ACO performs well for most cases, but it is certainly not optimal for all of them.
+		\item<6-> The Travelling Salesman Problem and its various applications and generalizations are one of the most famous optimization problems for discrete variables.
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------
+% Slide 18: Literature Review
+\section{References}
+\begin{frame}{References}
+	\vspace{-5mm}
+	\footnotesize{
+		\begin{thebibliography}{99}
+			\bibitem[geeksforgeeks_tsp]{p1} GeeksforGeeks (2020)
+			\newblock Proof that the TSP is NP-Hard.
+
+			\bibitem[P_NP]{p1} Aaronson, Scott.
+			\newblock "Guest column: NP-complete problems and physical reality." ACM Sigact News 36.1 (2005): 30-52.
+
+			\bibitem[ACO]{p1} Dorigo, Marco, Mauro Birattari, and Thomas Stutzle. 
+			\newblock "Ant colony optimization." IEEE computational intelligence magazine 1.4 (2006): 28-39.
+
+			\bibitem[ACO_implementation]{p1} User zro404 (n.d.)
+			\newblock \href{https://github.com/zro404/ACO}{Ant Colony Optimization - Python Implementation, GitHub.}
+
+			\bibitem[TSP_lecture_notes]{p1} Scheduling Theory, CO 454 (2009)
+			\newblock \href{https://www.cs.dartmouth.edu/~deepc/Courses/S09/Lectures/lecture14.pdf?utm_source=chatgpt.com}{Lecture 14: The Travelling Salesman Problem.}
+		\end{thebibliography}
+	}
+\end{frame}
+
+%------------------------------------------------
+% Final Slide
+\finalpagetext{Thank you for your attention}
+\makefinalpage
+
+\end{document}
