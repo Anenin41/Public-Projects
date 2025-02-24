@@ -3,3 +3,6 @@ This repository showcases projects that I have completed, both under the Univers
 
 ## Moments
 This folder contains the base files for the *Enhancing Black-Scholes Option Pricing: A Method of Moments Approach* report. The first draft of this work was done under the course of Model Reduction for Partial Differential Equations at the University of Groningen. Following the success that it had on the course, it was then polished and transformed into the draft that it is today.
+
+## Algorithms
+This folder contains all of the relevant files of the mathematical field of *Algorithms & Optimization*. In here, the main file of the beamer presentation on the subject of the *Travelling Salesman Problem* can be found.
