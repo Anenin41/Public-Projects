@@ -6,3 +6,6 @@ This folder contains the base files for the *Enhancing Black-Scholes Option Pric
 
 ## Algorithms
 This folder contains all of the relevant files of the mathematical field of *Algorithms & Optimization*. In here, the main file of the beamer presentation on the subject of the *Travelling Salesman Problem* can be found.
+
+## Fluids
+This folder stores everything relating to the *Navier-Stokes* equations, as well as projects that I have completed using them. Anything from computational fluid dynamics, to blood flows can be found here.
