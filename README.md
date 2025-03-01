@@ -9,3 +9,7 @@ This folder contains all of the relevant files of the mathematical field of *Alg
 
 ## Fluids
 This folder stores everything relating to the *Navier-Stokes* equations, as well as projects that I have completed using them. Anything from computational fluid dynamics, to blood flows can be found here.
+
+A simulation of a blood-flow experiment that I have created can be seen in the following short video.
+
+![Fluids/Final.gif]()
