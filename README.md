@@ -12,4 +12,4 @@ This folder stores everything relating to the *Navier-Stokes* equations, as well
 
 A simulation of a blood-flow experiment that I have created can be seen in the following short video.
 
-![Fluids/Final.gif]()
+![Final](https://github.com/user-attachments/assets/b8a73e2b-91be-428e-851e-b1cf42fbe003)
