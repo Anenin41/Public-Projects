@@ -2,7 +2,7 @@
 # Author: Konstantine Garas
 # E-mail: kgaras041@gmail.com
 # Created: Tue 04 Mar 2025 @ 23:01:01 +0100
-# Modified: Tue 04 Mar 2025 @ 23:50:04 +0100
+# Modified: Thu 06 Mar 2025 @ 13:57:42 +0100
 
 # Packages
 using HTTP, JSON3, DotEnv, ArgParse
@@ -34,6 +34,7 @@ end
 # Get command line arguments
 args = parse_commandline()
 
+# Check Data Type and return relevant one depending on user prompt
 if isnothing(args["city"])
     cities = ["Groningen", "Amsterdam", "Athens"]
 else
