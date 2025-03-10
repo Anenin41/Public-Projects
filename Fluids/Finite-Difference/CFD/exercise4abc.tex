@@ -1,0 +1,39 @@
+% File containing Exercise 4a, 4b, 4c of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 21:54:10 +0100
+% Modified: Wed 20 Nov 2024 @ 13:04:36 +0100
+
+\section{Exercise 4}
+
+\subsection{(a).}
+\label{subsec: 4a}
+The numerical results of this question can be seen at the second page of the Practical 4 handout.
+
+\subsection{(b).}
+\label{subsec: 4b}
+The numerical results of this question can be seen at the third page of the Practical 5 handout. However, some explanation is required about how I derived these results for the damping.
+
+A crude approximation of the numerical damping can be made by sampling over the peaks of the profile of the solution. The theory behind this method is quite simple and it is listed below. First introduce the value \( R_i \).
+
+\[
+	R_i = \left| \frac{A_{i+1}}{A_{i}} \right|
+\]
+where \( A_{i+1}, A_{i} \) are two consecutive peaks of profile of the numerical solution. Because MATLAB figures are interactive, one can get the exact coordinates of all \(A_i\), and as a direct result, calculate all of the ratios \( R_i \) between two consecutive peaks. When that is done, I add all of these ratios together and take the average, as is shown by the following function.
+
+\[
+	\text{Ans} = \frac{\sum R_i}{\# R_i}
+\]
+
+In order to not do all of these calculations by hand, I have implemented a Python script to do all the work for me. The code is presented below.
+
+\lstinputlisting[language=Python]{Extras/damping_check.py}
+
+By running this code on the terminal, a crude approximation of the numerical damping is calculated, as is confirmed on the next graph as well.
+
+\begin{center}
+	\includegraphics[width=0.7\textwidth]{Extras/damping.png}
+\end{center}
+
+\subsection{(c).}
+The numerical results of this question can be seen at the third page of the Practical 4 handout.

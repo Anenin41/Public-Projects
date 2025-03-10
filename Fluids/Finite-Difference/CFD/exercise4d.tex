@@ -1,0 +1,81 @@
+% File containing Exercise 4d of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 22:22:01 +0100
+% Modified: Wed 20 Nov 2024 @ 13:10:06 +0100
+
+\subsection{(d).}
+For this exercise, I am tasked to carry out Fourier stability analysis for the fully explicit method of the heat equation. To this end, I list the generalized Crank - Nicolson method.
+
+\[
+	\frac{T_{j}^{(n+1)} - T_{j}^{(n)}}{\delta t} = (1 - \omega) \frac{T_{j+1}^{(n)} - 2 T_{j}^{(n)} + T_{j-1}^{(n)}}{h^2} + \omega \frac{T_{j+1}^{(n+1)} - 2 T_{j}^{(n+1)} + T_{j-1}^{(n+1)}}{h^2}
+\]
+
+Because \( \omega = 0 \), the second fraction vanishes and the discrete equation is simplified down to
+
+\[
+	\frac{T_{j}^{(n+1)} - T_{j}^{(n)}}{\delta t} = \frac{T_{j+1}^{(n)} - 2 T_{j}^{(n)} + T_{j-1}^{(n)}}{h^2}
+\]
+
+I now multiply with \( \delta t \) and introduce the Fourier symbol
+\[
+	T_{j}^{(n)} = \hat{T}^{n} e^{i \beta x_{j}}
+\]
+In this case, the grid is uniform, which means that \( x_{j} = j \cdot h \), where \( h \) is the step size. By substitution, the Fourier symbol becomes:
+
+\[
+	T_j^{(n)} = \hat{T}^n e^{i \beta j h} 
+\]
+
+Now is the time to plug the Fourier symbol in the discrete equation.
+
+\[
+	\hat{T}^{n+1} e^{i \beta j h} - \hat{T}^{n} e^{i \beta j h} = \frac{\delta t}{h^2} \left[ \hat{T}^n e^{i \beta (j+1) h} - 2 \hat{T}^{n} e^{i \beta j h} + \hat{T}^n e^{i \beta (j-1) h} \right]
+\]
+
+I will now delete common terms on both sides of the equations, and group the terms that remain.
+
+\[
+	\hat{T}^{n+1} - \hat{T}^n = \frac{\delta t}{h^2} \left[ e^{i \beta h} + e^{-i \beta h} -2  \right]
+\]
+
+Introduce the trigonometric identity:
+
+\begin{equation} \label{eq: trigonometry}
+	e^{i \beta h} + e^{-i \beta h} = 2 \cos{(\beta h)} 
+\end{equation}
+
+I will plug this trigonometric identity into the final equation. Moreover, from now on, \( \beta h = \theta \), a substitution which aims to simplify the notation a little bit.
+
+\begin{align*}
+	\hat{T}^{n+1} - \hat{T}^{n} &= \frac{2 \delta t}{h^2} \hat{T}^{n} \left[ \cos{\theta} -1 \right] \implies \\
+	\hat{T}^{n+1} - \hat{T}^{n} &= \left( d \left[ \cos{\theta} -1 \right] + 1 \right) \hat{T}^{n} \implies \\
+	\hat{T}^{n+1} &= g(\theta) \hat{T}^{n}
+\end{align*}
+
+I want to study Fourier stability, as such I ask that the modulus of the Fourier Amplification factor is bounded by 1.
+
+\begin{align*}
+	\left| \frac{\hat{T}^{n+1}}{\hat{T}^{n}} \right| &\leq 1 \implies \\
+	\left| g(\theta) \right| &\leq 1 \implies \\
+	\left| d(\cos\theta - 1) + 1 \right| &\leq 1 \implies \\
+	\left| 1 - d(1-\cos\theta) \right| &\leq 1 
+\end{align*}
+
+The term inside the absolute value takes its maximum when the cosine becomes \( -1 \), i.e., when \( \theta = \pi \). By this, I can also formulate an expression about \( \beta = \pi/h\). 
+
+In addition, I get a Fourier stability condition involving \(d\).
+
+\begin{align*}
+	\left| 1 - 2d \right| &\leq 1 \implies \\
+	-1 \leq 1 - 2d &\leq 1 \implies \\
+	0 \leq d &\leq 1 \implies \\
+	\delta t &\leq  \frac{h^2}{2}
+\end{align*}
+
+The only thing that is left to do, is to check if the results in \ref{subsec: 4a} are correct.
+
+\begin{itemize}
+	\item For \(N=10 \implies h = 0.1\) then \( \delta t \leq 0.005 \), confirmed!
+	\item For \(N=20 \implies h = 0.05\) then \( \delta t \leq 0.00125 \), confirmed!
+\end{itemize}

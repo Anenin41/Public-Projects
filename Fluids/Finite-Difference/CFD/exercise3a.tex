@@ -1,0 +1,32 @@
+% File containing Exercise 3a of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 20:07:07 +0100
+% Modified: Wed 20 Nov 2024 @ 12:56:57 +0100
+
+\section{Exercise 3}
+In this exercise, I am tasked to study the wave equation, with specific boundary conditions, and on the computational domain of \( [0, 1] \). The code that handles this problem numerically is the following.
+
+\subsubsection*{wave.m}
+\lstinputlisting[language=Matlab]{Extras/wave.m}
+
+\subsection{(a).}
+The explicit - upwind scheme is governed by the following discrete equation.
+
+\[ \phi_{i}^{(n+1)} = \frac{d}{2} \phi_{i+1}^{(n)} + (1 - \eta - d) \phi_{i}^{(n)} + \left( \eta + \frac{d}{2} \right) \phi_{i-1}^{(n)} 
+\]
+
+However, in the wave equation \( k = 0 \), which means that \( d = 0 \). Thus the equation can be rewritten.
+
+\[
+	\phi_{i}^{(n+1)} = \phi_{i}^{(n)} - \eta \left( \phi_{i}^{(n)} - \phi_{i-1}^{(n)} \right)
+\]
+
+Now, because of the way that the code is implemented, it is possible for the user to choose \( \eta \) directly in the lines at the start of the algorithm. As such, it is also really easy to check if the stability requirement
+
+\[
+	\eta \leq 1
+\]
+is a sufficient condition for the numerical method to be stable. Truly, if \( \eta \) is chosen to be below 1, the method is confirmed to be stable, while if it is taken to be something like \( 1.5 \), then the scheme explodes and produces a really inaccurate result.
+
+

@@ -1,0 +1,102 @@
+% File containing Exercise 4e of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 23:03:04 +0100
+% Modified: Wed 20 Nov 2024 @ 13:18:04 +0100
+
+\subsection{(e).}
+\label{subsec: 4e}
+
+For this question, I am tasked to show that the generalized Crank-Nicolson method is unconditionally stable for \( \omega \geq 0.5 \). Moreover, I am to study the asymptotic behaviour of the amplification factor, as well as what happens to the oscillations when \( \omega \) grows.
+
+First, let \( \omega \geq 0.5 \). 
+\[
+	T_{j}^{(n+1)} - T_{j}^{(n)} = \frac{(1-\omega)\delta t}{h^2}\left( T_{j+1}^{(n)} - 2T_{j}^{(n)} + T_{j-1}^{(n)} \right) + \frac{\omega \delta t}{h^2} \left( T_{j+1}^{(n+1)} - 2T_{j}^{(n+1)} + T_{j-1}^{(n+1)} \right)
+\]
+
+By introducing the Fourier symbol: \( T_{j}^{(n)} = \hat{T}^{n} e^{i \theta j} \), as well as the trigonometric identity defined in equation \ref{eq: trigonometry}, I generate the following equation.
+
+\[
+	\hat{T}^{n+1} - \hat{T}^{n} = \frac{(1-\omega)\delta t}{h^2}\left( \hat{T}^{n} \left[2 \cos\theta - 2 \right] \right) + \frac{\omega \delta t}{h^2} \left( \hat{T}^{n+1} \left[2 \cos\theta - 2 \right] \right)
+\]
+
+The plan here is to study \( \hat{T}^{n+1} / \hat{T}^{n} \). To this end, I divide everything by \( \hat{T}^n \), and I introduce \( d \).
+
+\[
+	\frac{\hat{T}^{n+1}}{\hat{T}^{n}} - 1 = (1-\omega)d(\cos\theta - 1) + \omega d \left( \frac{\hat{T}^{n+1}}{\hat{T}^{n}} [\cos\theta -1] \right)
+\]
+
+To simplify the notation even more, I define \( G = \frac{\hat{T}^{n+1}}{\hat{T}^{n}} \). Thus, now I have
+
+\[
+	G - 1 = (1-\omega) d (\cos\theta - 1) + \omega d G (\cos\theta -1)
+\]
+and by doing the calculations, I reach the final form of the equation.
+
+\[
+	G = \frac{1 - (1-\omega)d(1-\cos\theta)}{1+\omega d (1-\cos\theta)}
+\]
+
+For Fourier Stability, I ask once again \( |G| \leq 1 \). To show this easily, set \(\tau = d(1 - \cos\theta)\)
+
+\begin{align*}
+	|G| &\leq 1 \implies \\
+	\left| \frac{1 + \omega \tau - \tau}{1 + \omega \tau} \right| &\leq 1 \numberthis \label{eq: fraction}
+\end{align*}
+
+Some facts are now required to proceed. More specifically, \( \omega \) is bounded in \( [0, 1] \). Moreover, \( \tau = d(1-\cos\theta) \) is bounded in \( [0, 2d] \). Why that is?
+
+\begin{align*}
+	-1 \leq \cos\theta &\leq 1 \implies \\
+	0 \leq 1 - \cos\theta &\leq 2 \xRightarrow{d>0} \\
+	0 \leq d(1-\cos\theta) &\leq 2d \implies \\
+	0 \leq \tau &\leq 2d
+\end{align*}
+
+So \( \tau \) is never negative, which leads to the fact that the nominator of the fraction in equation \ref{eq: fraction} is always smaller than the denominator and as such \( |G| \leq 1 \). Moreover, because \( \omega \geq 0.5 \), this proves the unconditional Fourier stability of the generalized Crank-Nicolson method for \( \omega \geq 0.5 \).
+
+Regarding the asymptotic behaviour of equation \ref{eq: fraction}, some arguments from approximation theory must be made to study this. First, I will rewrite the fraction as reference.
+
+\[
+	g(\theta) = \frac{1 - (1-\omega)d(1-\cos\theta)}{1 + \omega d (1-\cos\theta)}
+\]
+
+Notice that \( 1 - \cos\theta \) is bounded. Moreover, if \( 1 - \cos\theta^{*} = 0\), then I have the trivial solution of
+\[
+	g(\theta^{*}) = 1
+\]
+and 
+\[
+	\lim_{\delta t \to \infty} g(\theta^{*}) = 1 
+\]
+
+This case is of low interest however, so I will now list the more general one.
+
+\[
+	\left| \frac{1 - (1-\omega) d (1-\cos\theta)}{1 + \omega d (1-\cos\theta} \right| = \left| \frac{\frac{1}{d(1-\cos\theta)} - (1-\omega)}{\frac{1}{d(1-\cos\theta)} +\omega} \right|  
+\]
+
+However, as \( \delta t \to \infty \), then \( d \to \infty \) and \( \frac{1}{d(1-\cos\theta)} \to 0 \), because \( (1-\cos\theta) \) is bounded in \( (0, 1] \). 
+
+So, by implementing this asymptotic behaviour to the fraction above, I finally get:
+
+\[
+	\left| g(\theta) \right| \approx \left| -\frac{1-\omega}{\omega} \right| = \frac{1-\omega}{\omega}
+\]
+and this is how the amplification factor behaves as \( \delta t \to \infty \). 
+
+To conclude this question, I have to explain the behaviour of the results in \ref{subsec: 4b}. For \( \omega \geq 0.5 \), \( |g(\theta)| \leq 1 \) is satisfied and I have Fourier stability. In practice however \( \delta t \to \infty \) will never happen, since the computer is a finite machine, and at best it can achieve machine precision. This doesn't mean that the limit from the analysis above is useless, but it is not accurate by real life standards. Thus it can only give us an approximation of the asymptotic behaviour. 
+
+By plugging in the constants from question \textbf{(b).}, I end up with the following results.
+\begin{itemize}
+	\item \(\delta t = 0.5, \omega = 0.5 \implies G = 1 \). 
+	\item \(\delta t = 0.5, \omega = 0.6 \implies G \approx 0.6667 \).
+\end{itemize}
+
+As \(\omega\) approaches 1, the Fourier amplification factor approaches zero, meaning that the method is governed by increasingly \textbf{less} oscillations, only to reach \( \omega = 1 \), which guarantees a fully implicit, and oscillation free, numerical scheme.
+
+The observed amplification factors are different that the ones derived theoretically for a number of reasons.
+\begin{itemize}
+	\item \( \delta t = 0.5 \) is not \( \delta t \to \infty \) even by the machine precision standards.
+	\item Numerical errors at the most basic level of the algorithm (basic additions and multiplications) accumulate and produce local maxima that are not precisely aligned with the real ones. As such, there is a sample error because of this, which makes the approximation have an error at the first decimal.
+\end{itemize}

@@ -1,0 +1,81 @@
+% File containing Exercise 2a of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 17:33:57 +0100
+% Modified: Wed 20 Nov 2024 @ 12:50:39 +0100
+
+\section{Exercise 2}
+\label{sec: exercise2}
+
+\subsection{(a).}
+In this question, I am tasked with analyzing the stability of the explicit-method A scheme, on a non-uniform grid with constant stretch rate \( \frac{h_{+}}{h_{-}} = 0.95 \).
+
+\subsubsection{1).}
+Implementing positive coefficient analysis on the \( L, D, R \) coefficients of the numerical scheme, I yield a set of inequalities that \textbf{all} must be satisfied in order for the algorithm to be numerically stable. The analysis below uses the short-hand notation introduced in sub-section \ref{subsec: explicit_method_a}. 
+
+\begin{equation} \label{eq: condition1}
+	L \geq 0 \implies \frac{u \delta t}{s(i)} + \frac{2k \delta t}{h(i-1) s(i)} \geq 0
+\end{equation}
+equation \ref{eq: condition1} is satisfied automatically because all of the terms are positive by construction.
+
+\begin{align*}
+	D \geq 0 &\implies \\
+	1 - \frac{2k \delta t}{p(i)} &\implies \\
+	2k \delta t \leq p(i) &= h(i-1) \cdot h(i)
+\end{align*}
+
+Because the stretch rate of the grid is constant, I have a constant relation between two consecutive grid distances \( h(i-1) = \frac{h(i)}{0.95} \). By plugging in this equation to the inequality above, I easily get the final form of the second condition.
+
+\begin{equation} \label{eq: condition2}
+	2k \delta t \leq \frac{\left( h(i) \right)^2}{0.95} 
+\end{equation}
+
+The last condition reads as follows:
+
+\begin{align*}
+	R \geq 0 &\implies \\
+	\frac{2k \delta t}{h(i) s(i)} - \frac{u \delta t}{s(i)} \geq 0 &\implies \\
+	\frac{2k \delta t}{h(i)} \geq u &\implies \\
+	\frac{u h(i)}{k} \leq 2 \numberthis \label{eq: condition3}
+\end{align*}
+
+Condition \ref{eq: condition3} resembles a modified grid P\`{e}clet condition for the non-uniform grid case. However this is where the similarities end. To be more specific, since the grid is non-uniform, \( h \) here is a vector, or more precisely an array, that holds the results of \( \Delta x = x_i - x_{i-1} \), where \( x_i, x_{i-1} \) are two consecutive grid points. In addition, one might also observe that because the grid is generated in such a way that it gets finer towards the right boundary of the computational domain, the \( h \) array contains the terms of a strictly decreasing sequence of real numbers.
+
+\[
+	h_1 > h_2 > h_3 > \dots > h_{n}
+\]
+
+By this observation, and because \( h(i) \) changes with each iteration, an equivalent set of conditions can be formulated by using the minimum value of the \( h \) array. Thus, the inequalities now become:
+
+\[
+	2k \delta t \leq \frac{(\min{h})^2}{0.95} \, \text{ and } \, \frac{u \cdot \min{h}}{k} \leq 2
+\]
+
+In conclusion, I also have to check if these conditions are confirmed to be true by the program. To this end, I have \( \min{h} = 0.0046, k = 0.01, \delta t = 0.001, U = 1 \). As such, the numerical results are the following:
+
+\[
+	2.0e-05 \leq 2.2649e-05 \, \text{ and } \, 0.4639 \leq 2
+\]
+which are both true, meaning that the numerical scheme for these parameters is stable.
+
+\subsubsection{2).}
+The set of conditions that I derived from the non-uniform and explicit case is indeed worse that the ones drawn from the uniform setting. This is because I have to take into consideration the stretch rate, in addition to all the other factors that contribute to the stability of the method. The following table confirms this simple observation.
+
+\begin{table}[h!]
+	\begin{center}
+		\begin{tabular}{ |c|c|}
+			\hline
+			\textbf{Uniform Case} & \textbf{Non-uniform Case} \\
+			\hline 
+			Thickness of the grid	& Thickness of the grid \\
+			\hline	
+			Time step				& Time step				\\
+			\hline
+			Velocity \& Diffusion coefficient & Velocity \& Diffusion coefficient \\
+			\hline
+			-						& \textbf{Stretch rate r} \\
+			\hline
+		\end{tabular}
+		\caption{Factors that contribute to the stability of the numerical scheme.}
+	\end{center}
+\end{table}

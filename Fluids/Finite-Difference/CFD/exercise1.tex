@@ -1,0 +1,115 @@
+% File containing Exercise 1 of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 16:13:00 +0100
+% Modified: Tue 04 Mar 2025 @ 19:37:25 +0100
+
+\section{Exercise 1}
+\label{sec: exercise1}
+
+In this exercise it is asked of me to create MATLAB code that implements the unsteady convection-diffusion equation 
+\[
+	\frac{ d \phi}{dt} + U \frac{d \phi}{dx} = k \frac{d^2 \phi}{dx}
+\]
+with Dirichlet boundary conditions, on a specific computational domain \( [0,L] \), and by taking into consideration the central, upwind and method A schemes, for both the explicit and implicit time integration. The numerical schemes that are listed below are in their final form, and while all of the calculations are skipped, they are quite straight forward to show.
+
+In addition, explicit schemes don't require the use of a matrix solver (like the tdma algorithm) because the algorithm calculates the new time step directly from the old one. This is not the case for the implicit method, and as such the iteration will need a matrix solver to calculate the new time step.
+
+\subsection{Explicit Time \& Central Scheme}
+\[
+	\phi_{i}^{(n+1)} = \left( \frac{d}{2} - \frac{\eta}{2} \right) \phi_{i+1}^{(n)} + \left( 1 - d \right) \phi_{i}^{(n)} + \left( \frac{d}{2} + \frac{\eta}{2} \right) \phi_{i-1}^{(n)}
+\]
+with the elements of the coefficient matrix being the following:
+\begin{align*}
+	R &= \frac{d}{2} - \frac{\eta}{2} \\
+	D &= 1-d \\
+	L &= \frac{d}{2} + \frac{\eta}{2} 
+\end{align*}
+
+\subsection{Explicit Time \& Upwind Scheme}
+\[
+	\phi_{i}^{(n+1)} = \frac{d}{2} \phi_{i+1}^{(n)} + \left( 1 - \eta - d \right) \phi_{i}^{(n)} + \left( \eta + \frac{d}{2} \right) \phi_{i-1}^{(n)}
+\]
+with the elements of the coefficient matrix being the following:
+\begin{align*}
+	R &= \frac{d}{2} \\
+	D &= 1-\eta-d \\
+	L &= \eta + \frac{d}{2} 
+\end{align*}
+
+\subsection{Explicit Time \& Method A Scheme}
+\label{subsec: explicit_method_a}
+In this case, the grid is not uniform, and as such the scheme becomes more complex in terms of notation.
+
+\[
+\phi_{i}^{(n+1)} = \left( \frac{2k \delta t}{h_{+} (h_{+} + h_{-})} - \frac{u \delta t}{h_{+} + h_{-}} \right) \phi_{i+1}^{(n)} + \left( 1 - \frac{2k \delta t}{h_{+}h_{-}} \right) \phi_{i}^{(n)} + \left( \frac{u \delta t}{h_{+} + h_{-}} + \frac{2k \delta t}{h_{-}(h_{+} + h_{-})} \right) \phi_{i-1}^{(n)}
+\]
+
+To make the notation slightly more readable, there are two actions that one can take. The first one is to use code notation, in the sense that because \( h \) is an array that holds the different values of \(\Delta x\), I can replace \( h_{+} = h(i) \) and \( h_{-} = h(i-1) \). The second action is to identify common operations, like \( s(i) = h(i-1) + h(i) \) and \( p(i) = h(i-1) h(i) \), and replace the lengthy denominators with those short-hand variables. By performing these, the elements of the coefficient matrix are the following:
+
+\begin{align*}
+	R &= \frac{2k \delta t}{h(i) s(i)} - \frac{u \delta t}{s(i)} \\
+	D &= 1 - \frac{2k \delta t}{p(i)} \\
+	L &= \frac{u \delta t}{s(i)} + \frac{2k \delta t}{h(i-1) s(i)}
+\end{align*}
+
+\subsection{Implicit Time \& Central Scheme}
+\[
+	\phi_{i}^{(n)} = \left( \frac{\eta}{2} - \frac{d}{2} \right) \phi_{i+1}^{(n+1)} + \left( 1 + d \right) \phi_{i}^{(n+1)} + \left( - \frac{d}{2} - \frac{\eta}{2} \right) \phi_{i-1}^{(n+1)}
+\]
+with the elements of the coefficient matrix being the following:
+\begin{align*}
+	R &= \frac{\eta}{2} - \frac{d}{2} \\
+	D &= 1+d \\
+	L &= - \frac{\eta}{2} - \frac{d}{2}
+\end{align*}
+
+\subsection{Implicit Time \& Upwind Scheme}
+\[
+	\phi_{i}^{(n)} = -\frac{d}{2} \phi_{i+1}^{(n+1)} + \left( 1 + \eta + d \right) \phi_{i}^{(n+1)} + \left( - \eta - \frac{d}{2} \right) \phi_{i-1}^{(n+1)}
+\]
+with the elements of the coefficient matrix being the following:
+\begin{align*}
+	R &= -\frac{d}{2} \\
+	D &= 1 + \eta + d \\
+	L &= -\eta - \frac{d}{2}
+\end{align*}
+
+\subsection{Implicit Time \& Method A Scheme}
+Like the non-uniform case with explicit time integration, the scheme uses difficult notation, but it is not that complex to understand. 
+
+\[
+	\phi_{i}^{(n)} = \left( \frac{u \delta t}{h_{+} + h_{-}} - \frac{2k \delta t}{h_{+} (h_{+} + h_{-})} \right) \phi_{i+1}^{(n+1)} + \left( 1 + \frac{2k \delta t}{h_{+}h_{-}} \right) \phi_{i}^{(n+1)} + \left( - \frac{u \delta t}{h_{+} + h_{-}} - \frac{2k \delta t}{h_{-} (h_{+} + h_{-})} \right) \phi_{i-1}^{(n+1)}
+\]
+
+Once again, to simplify the presentation of this expression, I will use the code notation introduced in \ref{subsec: explicit_method_a}, as well as simplify the denominators by replacing common operations with the variables \( s(i), p(i) \). This transformation leads to the following coefficients, which once again form the coefficient matrix of the problem.
+
+\begin{align*}
+	R &= \frac{u \delta t}{s(i)} - \frac{2k \delta t}{h(i) s(i)} \\
+	D &= 1 + \frac{2k \delta t}{p(i)} \\
+	L &= - \frac{u \delta t}{s(i)} -\frac{2k \delta t}{h(i-1) s(i)} 
+\end{align*}
+
+\subsection{Code}
+The numerical schemes that are presented above are implemented in different Matlab files following the divide and conquer principle. Moreover, because the uniform and non-uniform cases require different arguments as far as functions go, there is an additional division between the uniform grid case and the non-uniform grid case. 
+
+\subsubsection{unsteady.m}
+\label{subsubsec: unsteady}
+This file implements the main script that solves the unsteady convection-diffusion equation, calling on the required functions and plotting the result.
+\lstinputlisting[language=Matlab]{Extras/unsteady.m}
+
+\subsubsection{explicit\_uniform.m}
+The function in this file implements the central and upwind discretizations, using explicit time integration on a uniform grid.
+\lstinputlisting[language=Matlab]{Extras/explicit_uniform.m}
+
+\subsubsection{explicit\_non\_uniform.m}
+The function in this file implements the method A discretization on a non-uniform grid, using explicit time integration.
+\lstinputlisting[language=Matlab]{Extras/explicit_non_uniform.m}
+
+\subsubsection{implicit\_uniform.m}
+Completely analogous to the explicit and uniform case, this function implements the central and upwind schemes on a uniform grid, using implicit time integration.
+\lstinputlisting[language=Matlab]{Extras/implicit_uniform.m}
+
+\subsubsection{implicit\_non\_uniform.m}
+Lastly, this function implements method A discretization on a non-uniform grid, using implicit time integration.
+\lstinputlisting[language=Matlab]{Extras/implicit_non_uniform.m}

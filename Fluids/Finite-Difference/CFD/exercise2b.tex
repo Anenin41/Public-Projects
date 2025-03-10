@@ -1,0 +1,23 @@
+% File containing Exercise 2b of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 19:11:46 +0100
+% Modified: Tue 04 Mar 2025 @ 19:22:34 +0100
+
+\subsection{(b).}
+With regards to the implicit \& method A combination, a large part of the stability analysis is skipped by using the fact that implicit time integration schemes are generally unconditionally stable. In practice this means that implicit methods can handle large time steps \( \delta t \) without breaking down, a behaviour that is not present in explicit schemes.
+
+However, being stable is not equivalent to being accurate, and while implicit methods are always stable, some conditions must be satisfied to also ensure that the implicit and method A numerical scheme is accurate. By implementing the CFL-condition to the unsteady convection diffusion equation, and by doing some calculations, the accuracy condition for the implicit - method A scheme is the following.
+
+\[
+	\frac{u \Delta t}{\Delta x} + k \frac{\Delta t^2}{\Delta x^2} \leq C
+\]
+where C is the Courant number, which must be \( 1 \) for the scheme to be accurate. 
+
+For method A however, the grid is once again non-uniform, but is generated using a geometric sequence with stretch rate constant at \( 0.95 \). Using the same argument as in the explicit method, \( h \) is a strictly decreasing sequence of real numbers, and because this time is at the denominator, the inequality might not be satisfied for the smallest values of \( \Delta x = h \). As such, the condition that I am searching has the following final form.
+
+\[
+	\frac{u \Delta t}{\min{\Delta x}} + k \frac{\Delta t^2}{(\min{\Delta x})^2} \leq 1
+\]
+
+For \( U = 1, k = 0.01, \Delta t = 0.001, \min{\Delta x} = 0.0046 \), the inequality is satisfied, a result which makes the implicit - method A combination accurate.

@@ -1,0 +1,53 @@
+% File containing Exercise 3c of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 21:22:14 +0100
+% Modified: Wed 20 Nov 2024 @ 13:03:35 +0100
+
+\subsection{(c).}
+According to the handout, for values of \( \eta < 0.5 \), the numerical waves travel slower than the wave of the analytic solution. In contrast, for \( \eta > 0.5 \) the numerical waves travel faster than the wave of the analytic solution. This leads us to choose \( \eta = 0.5 \), because such a choice eliminates the dispersion effect in the profile of the numerical solution.
+
+However, as is shown in \ref{subsec: damping}, numerical damping is not eliminated with \( \eta = 0.5 \). Damping in this case influences the numerical solution in such a way, that as the time iteration goes on, the amplitude of the wave decreases.
+
+One can also calculate the margin of the decrease on paper, and can check whether these results are right or wrong in the profile of the numerical solution. I start this analysis by noting down the constants of the problem.
+
+\[
+	\Phi(t,x) = 2 + \sin\left(6 \pi [x - U\cdot t]\right)
+\]
+where, \( U = 1, \delta t = 0.0051, h = 0.0101, N = 100 \). The total time of the simulation is \( T = 3 \) (in seconds), and the time snapshot of \( t = 1 \) is considered. By plugging in these values, the function in question becomes:
+
+\[
+	\Phi(1, x)) = 2 + \sin \left(6 \pi (x - 1) \right)
+\]
+with \( \omega = 6 \pi \). This value of \( \omega \), yields the angle of the Fourier amplification factor \( \theta = \omega \cdot h = 0.0606 \pi \). The Fourier amplification factor is quite straightforward to calculate in this case, and it is given by the equation
+
+\[
+	g(\theta) = 1 - \eta + \eta \cos(\theta) - \eta \sin(\theta) \cdot i
+\]
+in which \( \mathfrak{Re} = 1 - \eta + \eta \cos(\theta) \) and \( \mathfrak{Im} = - \eta \sin(\theta) \). By taking the modulus of this complex function, I can check if the method is Fourier stable. Moreover, I am going to need this value later to calculate the cumulative damping factor of the numerical solution.
+
+\[
+	\begin{cases}
+		\mathfrak{Re} = 1 - 0.5 - 0.5 \cdot \cos(0.0606\pi) = 0.9910 \\
+		\mathfrak{Im} = -0.5 \cdot \sin(0.0606\pi) = -0.0946 
+	\end{cases} 
+	\implies |g(\theta)| = \sqrt{\mathfrak{Re}^2 + \mathfrak{Im}^2} = 0.9955
+\]
+
+The time snapshot is defined as \(N \times \delta t\). Because the number of iterations until I reach \(t = 1\) is unknown, I am going to calculate it, because I will use it later as well.
+
+\[
+	t = N \cdot \delta t \implies N = 198
+\]
+
+So, the algorithm needs to perform \( 198 \) time iterations until it reaches the time snapshot of 1 second. As such, by combining all of these results, the margin of the numerical damping is calculated as follows.
+
+\[
+	\left( 1 - |g(\theta)|^{198} \right) \approx 0.5906
+\]
+
+So, the change in amplitude must be somewhere near the margin of \( 0.4 \) at \(t = 1\). The following figure shows that indeed this is an accurate result, since the travelling wave at \(t = 1\) is smaller by a factor of \( \approx 0.4 \).
+
+\begin{center}
+	\includegraphics[width=0.65\textwidth]{Extras/exercise3c.png}
+\end{center}

@@ -1,0 +1,36 @@
+% File containing Exercise 2c of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Tue 19 Nov 2024 @ 19:38:55 +0100
+% Modified: Wed 20 Nov 2024 @ 12:53:23 +0100
+
+\subsection{(c).}
+In this question I am tasked to implement periodic boundary conditions on the code, and check the stability requirements for the explicit and central scheme, using positive coefficient analysis and Fourier analysis.
+
+\subsubsection{1).}
+The periodic boundary conditions are implemented on the \verb|unsteady.m| file, on lines \verb|33-35| as is shown in \ref{subsubsec: unsteady}. 
+
+\subsubsection{2).}
+The explicit and central numerical scheme is governed by the following discrete equations.
+
+\[
+	\phi_{i}^{(n+1)} = \left( \frac{d}{2} - \frac{\eta}{2} \right) \phi_{i+1}^{(n)} + (1-d) \phi_{i}^{(n)} + \left(\frac{d}{2} + \frac{\eta}{2} \right) \phi_{i-1}^{(n)}
+\]
+
+By performing positive coefficient analysis, the following inequality is generated.
+
+\[
+	\eta \leq d \leq 1
+\]
+
+Regarding the Fourier stability analysis, by using the same method as the one in the reader, I yield the following inequality condition.
+
+\[
+	\eta^2 \leq d \leq 1
+\]
+
+Once again, I have to show that the method is stable, which means that I have to prove that these conditions hold. Truly, by taking into consideration the constants \(U = 1, \delta t = 0.001, k = 0.01, h \approx 0.0204\), I have that \( \eta = 0.0490\) and \( d = 0.0480 \). These results lead to the conclusion that the positive coefficient condition is violated, but the Fourier stability condition holds.
+
+Such a violation of the positive coefficients stability makes the final profile take negative values near the right boundary of the computational domain, as can be shown in the following figure.
+
+\includegraphics{Extras/exercise2c.png}

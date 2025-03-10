@@ -1,0 +1,54 @@
+% File containing Exercise 4f of CFD - Practical 4 %
+% Author: Konstantine Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Wed 20 Nov 2024 @ 00:10:14 +0100
+% Modified: Wed 20 Nov 2024 @ 13:33:49 +0100
+
+\subsection{(f).}
+\label{subsec: 4f}
+To study for what \( \omega \) the generalized Crank-Nicolson scheme is wiggle-free, it is imperative to study the discrete equation. In this part, I will skip the process from which the equations are derived, and I will only list the final results.
+
+\[
+	-\frac{\omega \delta t}{h^2} T_{j+1}^{(n+1)} + \left(\frac{2 \omega \delta t}{h^2} + 1 \right) T_{j}^{(n+1)} - \frac{\omega \delta t}{h^2} T_{j-1}^{n+1} = \frac{(1-\omega) \delta t}{h^2} T_{j+1}^{(n)} + \left(1 - \frac{2(1-\omega)\delta t}{h^2} \right) T_{j}^{(n)} + \frac{(1-\omega)\delta t}{h^2} T_{j-1}^{(n)}
+\]
+
+The scheme is now split into implicit and explicit sides, and can be written in a more compact form as 
+\[ 
+	A \cdot \vec{T}^{(n+1)} = B \cdot \vec{T}^{(n)}
+\]
+where \(A, B\) are the coefficient matrices of the implicit and the explicit methods respectively. 
+
+I want the method to be wiggle-free, which means that the coefficients of the triangular matrices \( A, B\) must not be negative. In order for this to hold, and because of the way the implicit and explicit methods are divided in different sides, the signs of the coefficients also follow the same behaviour. More specifically, after setting \( (\omega \delta t)/h^2 = \alpha \) and \( (1-\omega)\delta t / h^2 = \beta \), then the conditions that I ask to be satisfied are the following.
+
+\[
+	\begin{cases}
+		-\alpha \leq 0 \\
+		1 + 2\alpha \geq 0
+	\end{cases}
+	\text{and } \,\,
+	\begin{cases}
+		\beta \geq 0 \\
+		1 - 2\beta \geq 0
+	\end{cases}
+\]
+
+It is easy to spot that the coefficients of the implicit method satisfy the inequality relations automatically. As such, the condition that I am searching for will be derived by the explicit method, something that was expected since the implicit method is unconditionally stable and wiggle-free.
+
+Before I dive into the analysis, it is imperative to point out the following. The coefficients of the \( A \) matrix are negative by construction. This is not problematic however, because in the computations the matrix is inverted, and its negative coefficients contribute positively to the solution.
+
+The conditions that I end up with after seeing the analysis through are the following:
+
+\[
+	0 \leq \omega \leq 1 \,\, \text{ and } \,\, 1-\omega \leq \frac{h^2}{2\delta t}
+\]
+
+I will keep the second condition like this and I will not analyse it further for two reasons. Firstly, it provides the theoretical condition that I was searching for. Secondly, it also checks for the bias of the numerical scheme, and more specifically if it is explicit, or implicit biased. Different values of \( 1 - \omega \) show this. Thus, I ended up with a condition that checks two things instead of one, something really useful in terms of practicality. 
+
+Lastly, I will take cases for the different values of \( \omega \).
+
+\begin{itemize}
+	\item \( \omega = 0.5 \). I have showed before that for \( \omega \geq 0.5 \) the method becomes unconditionally stable. However, oscillations occur due to insufficient damping.
+	\item \( \omega > 0.5 \). As \( \omega \to 1 \), damping become sufficient, which in the end leads to wiggle-free solutions.
+\end{itemize}
+
+To conclude, for numerical stability wiggles, \( \omega \geq 0.5 \) is a sufficient condition to derive numerical schemes without any instabilities. To also counter the damping effects, then \( \omega = 1 \) ensures a fully implicit method, with no numerical damping.
