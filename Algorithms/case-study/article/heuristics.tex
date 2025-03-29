@@ -1,0 +1,144 @@
+% Heuristic Algorithm Section for the Final Essay of Math & Environment %
+% Author: Konstantinos Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Fri 28 Mar 2025 @ 14:25:50 +0100
+% Modified: Sat 29 Mar 2025 @ 13:27:34 +0100
+
+\section{Heuristic Algorithms}
+\label{sec: heuristics}
+
+Since the TSP is infeasible to solve exactly for large instances, scientists have created various different algorithms that tackle this problem and produce favourable results, effectively sacrificing accuracy for speed. Apart from implementing an ingenious mechanism, these \textbf{heuristic algorithms} produce good approximations of the exact solution, and often stem from nature itself.
+
+\subsection{Graph Representations}
+Before delving into the algorithms themselves, it is important to showcase how graphs data structures are represented in the context of a computer. There are usually two main implementations \cite{cormen2022introduction}.
+
+First, there is the \textbf{adjacency matrix} representation, where connected cities and distances are stored into a linear data structure called a matrix. Table \ref{table: adjacency_matrix_example} provides an example of this linear formulation.
+
+\begin{table}
+	\centering
+	\begin{tabular}{ |c|c|c|c|c| }
+		\hline
+		\textbf{City / Distance} & \textbf{Amsterdam} & \textbf{Groningen} & \textbf{The Hague} & \textbf{ etc...} \\
+		\hline
+		\textbf{Amsterdam} & 0 & 205 km & 63.9 km & \( \dots \) \\
+		\textbf{Groningen} & 205 km & 0 & 238 km & \( \dots \) \\
+		\textbf{The Hague} & 63.9 km & 238 km & 0 & \( \dots \) \\
+		\textbf{etc...} & \( \dots \) & \( \dots \) & \( \dots \) & 0 \\
+		\hline
+	\end{tabular}
+	\caption{An example of a matrix.}
+	\label{table: adjacency_matrix_example}
+\end{table}
+
+Representing graphs in this way is \textbf{straightforward}, and requires little to no programming experience. It is also a \textbf{symmetric process}, meaning that generating the graph, accessing information regarding the weights, and implementing algorithms that take advantage of this characteristic, can lead to significant speed increases. This iteration in the literature is known as the \textbf{Symmetric} TSP (STSP).
+
+The other way is to represent each city in the dataset as a pair of coordinates. This way is substantially slower in case study generation, since the operations of computing the distance and adding the weights to the data structure require numerous Euclidean distance calculations.
+
+However, this is the original formulation of the TSP, and almost all modern applications and heuristic algorithms in the literature have been designed to tackle this iteration of the problem. Nevertheless, for the simplicity of this report, the \textbf{STSP} iteration is chosen with \textbf{adjacency matrix representation}. The reason behind this choice is that the algorithms that are presented below have been tested against the Euclidean TSP, and there is already a long list of documented results. This cannot be said for the other way around.
+
+\subsection{Nearest Neighbour}
+\label{subsec: NN}
+
+Starting with the most simple algorithm of all, the Nearest Neighbor (NN) algorithm forms the basis for many more complex processes.
+
+This method is nothing more that a standard, but fast, search algorithm, and because of its implementation simplicity, it has correctly established its place in most Computer Science and Graph Theory textbooks.
+
+The NN, is a \textbf{greedy algorithm} that starts at a random city and repeatedly selects the nearest unvisited one until a full tour of the graph is complete. The lack of many computations, and the symmetric matrix representation of graphs make it very fast, but not especially effective. In truth, it has been proven that for some cases of the STSP, the NN algorithm actually produces the \textit{worst} possible tour \cite{gutin2002traveling}, leading researchers to believe that for this instance of problems, greedy algorithms should be avoided in favour of other, more complex algorithmic processes.
+
+\subsection{Genetic Algorithm}
+\label{subsec: GA}
+
+The family of Genetic Algorithms (GA) belongs to the larger class of evolutionary algorithms, which implement the basic ideas of natural selection.
+
+More specifically, each GA consists of a species that can adapt to changes in their environment, survive and reproduce to form the next generation. Accordingly, each generation consists of a population of individuals, which, through a reproduction and mutation process, produce offspring that are more fit to perform a certain task.
+
+In the case of the TSP, the population consists of individual solutions to the problem. Each solution, is composed of a list of cities, or \textbf{genes} under the context of this algorithm. By emulating the \textbf{survival of the fittest} aspect of evolution, the algorithm checks all solutions and finds few of the best.
+
+Then, by implementing a reproduction procedure, only these best solutions (individuals) are allowed to reproduce, generating a new population of better solutions. In order to avoid over-fitting the population, the algorithm also incorporates a mutation procedure, which diversifies the cities in each new offspring with the goal of diversification of the gene pool. The pseudo-code of this family of algorithms is elegantly introduced in \cite{liu2018greedy}.
+
+The following figures\footnote{Courtesy of \href{https://www.geeksforgeeks.org/genetic-algorithms/}{GeeksforGeeks}.} visually explain the key concepts of the Genetic Algorithm for the TSP.
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Extras/Crossover Operator Example.png}
+	\caption{Here, candidate solutions (Parent 1, Parent 2) have been chosen as the best, and by applying the reproduction operator, they generate an offspring.}
+	\label{fig: crossover}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Extras/Mutation Operator Example.png}
+	\caption{The offspring is then mutated, in order to diversify the generation and the gene pool, so the algorithm doesn't get saturated by certain solutions.}
+	\label{fig: mutation}
+\end{figure}
+
+After the new generation of solutions has been produced, and the old one is no longer in play, the process is re-iterated until a tolerance on total path length, or maximum number of generations, is achieved.
+
+\subsection{Simulated Annealing}
+\label{subsec: SA}
+
+The Simulated Annealing (SA) algorithm, is another heuristic choice that has as its main advantage the fact that it avoids getting stuck in local optima, which is often the case with iterative algorithms in general.
+
+Its name comes from the annealing process in metallurgy \cite{kirkpatrick1983optimization}, where a metal is superheated to high temperatures quickly and then gradually cooled. When heat-bathing the material, its atoms move erratically as energy is introduced and the state of matter changes. During this stage, the material become more ductile and easier to work with. Then, the temperature is reduced, allowing the atoms to fall into more ordered states.
+
+Similarly, in SA, a search process starts with a high-energy state, which in this context represents an initial solution with a large path length. Then, a new solution is generated by slightly perturbing the initial one. This can be done in the case of STSP, by swapping two cities in the travelling order, and recalculating the path length.
+
+Then, the two solutions are compared. If their difference in energy,
+
+\[
+	\Delta E = d_{\text{new}} - d_{\text{old}} < 0 
+\]
+the new solution is of lower energy state, and thus of smaller total distance, so the algorithm accepts it.
+
+However, what happens if \( \Delta E > 0 \)? In this case, the worse solution is \textbf{accepted} with a probability, which depends on the current temperature of the system.  This simulates the erratic behaviour of atoms in greater energy states, as is the case in physical annealing, and allows the algorithm to escape local minima, by accepting a new candidate which is worse than the one before.
+
+For context, the authors of this method used the Boltzmann probability distribution as their acceptance criterion, drawn from Statistical Mechanics \cite{kirkpatrick1983optimization}.
+
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}[node distance=2.5cm, auto]
+		% First box
+	    \node[draw, text width=10cm, align=center, inner sep=8pt] (box_one) {
+				Generate  \(r \in [0,1]\) \& Generate \(p \sim \exp \left( \frac{-E[r]}{k_B T} \right)\)
+			};
+
+		% Second box
+		\node[draw, text width=10cm, align=center, inner sep=8pt, below of=box_one, yshift=-0.5cm] (box_two) {
+					Test \( r < p \implies
+					\begin{cases}
+						\text{YES } \rightarrow \text{Accept worse solution} \\
+						\text{NO } \rightarrow \text{Reject worse solution}
+					\end{cases}
+				\)
+			};
+
+	    % Arrow between boxes
+		\draw[->, thick] (box_one) -- (box_two);
+	\end{tikzpicture}
+\end{figure}
+
+Here:
+\begin{itemize}
+	\item \(E[r_i]\) is the energy of the configuration of cities, i.e. the distance of the current tour.
+	\item \(k_B\) is the Boltzmann constant.
+	\item \(T\) is the current temperature of the system.
+\end{itemize}
+
+From rudimentary statistics, the acceptance criterion is less enforced when the system is of low energy, and more possible to occur when there are higher temperatures in play. Lastly, this iterative process continues until a stopping criterion is reached, or a certain tolerance on the length of the final tour is achieved.
+
+\subsection{Ant Colony Optimization}
+\label{subsec: ACO}
+
+Lastly, a famous heuristic family of algorithms comes from the Ant Colony systems of AC for short.
+
+Ants in the real-world are capable of finding the shortest path from a food source back to their nest, without the uses of visual cues \cite{beckers1992trails}. This is achieved by depositing pheromone information as they walk, which eventually reinforces certain routes, and leads them to the optimal path back home.
+
+Similarly, in the AC family of algorithms for the TSP, artificial ants cooperate to find the optimal solution of the problem, by exchanging information via pheromones deposited on graph edges (roads) \cite{dorigo1997ant}. This scheme, which has similarities with reinforcement learning procedures, takes into consideration the balance between heuristic information (shorter distances between two cities) and pheromone numbers deposited on edges by past iterations.
+
+As such, each agent takes advantage of the deposited information by other ants on the graph, while also retaining the freedom to search an optimal path on its own. Thus, there is a balance here between exploration of new paths, and exploitation of previous knowledge. 
+
+The algorithm works as follows. First, each ant generates a tour by choosing which city to visit next, by a \textbf{probabilistic city transition rule}. This rule favours ants which prefer to move to cities which are connected by short distances, with a high amount of pheromone.
+
+Once all ants have completed their tour, a \textbf{global pheromone update rule} is applied. During this phase, a fraction of the deposited pheromone evaporates from all edges. This causes paths which are not preferred by many ants to become less desirable. In addition, each ant then deposits a small amount of pheromone on the edges that belong to its tour, in proportion to how \textit{short} the tour war. 
+
+When the process if finished, the resulting edges that belong in small tours, receive the greatest amount of pheromones, reinforcing optimal choices for the next generation of ants to traverse the graph. This scheme is then re-iterated until a stopping criterion is met.

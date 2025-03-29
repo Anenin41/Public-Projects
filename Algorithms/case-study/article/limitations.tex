@@ -1,0 +1,32 @@
+% Limitation section of Final Essay for Math & Environment %
+% Author: Konstantinos Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Fri 28 Mar 2025 @ 15:52:26 +0100
+% Modified: Sat 29 Mar 2025 @ 13:30:37 +0100
+
+\section{Limitations}
+\label{sec: limitations}
+
+Apart from being only approximation algorithms, the families of  the numerical schemes that were introduced in the previous section have many limitations, most of which are prevalent in all individual implementation cases.
+
+\subsection{Nearest Neighbour}
+\textbf{Greedy, inaccurate but fast.}
+
+Due to the symmetric nature of the case study, the NN algorithm was able to produce good results even for its greedy nature. In the literature however, there are many mathematicians who advise against the use of this algorithm, due to the sheer number of bad cases that exist, that make it achieve the worst possible results \cite{gutin2002traveling}.
+
+\subsection{Genetic Algorithm}
+\textbf{Initialization matters, performance considerations.}
+
+Since it is up to the user to define an initial instance of the population, and efficient reproduction (also called crossover) and mutation operators, this algorithms can have significantly worse performance than all other candidates of this study. Its enormous uptime and worse results are evident in Section \ref{sec: results}. Lastly, to showcase how important is proper initialization for this algorithm, the Greedy Permuting Method \cite{liu2018greedy} is also tested, which produces much more acceptable results than the default GA.
+
+\subsection{Simulating Annealing}
+\textbf{Initialization matters, acceptance criterion as well.}
+
+As Simulated Annealing is also an iterative algorithm, the initial solution that forms the basis of the algorithm has significant implications on its actual performance. In addition, the acceptance criterion is also something that requires careful consideration, especially when the algorithm accepts a worse solution than the one before. Simply put, we try to avoid having good solutions being overwritten by worse ones. Lastly, the algorithm produces better results as we increase the number of allowed iterations (the starting temperature).
+
+\subsection{Ant Colony Optimization}
+\textbf{Heavy on user defined parameters.}
+
+The Ant Colony family has the problem of being very dependent on the choices made by the user. The decay rate of pheromones, the importance of heuristic information (distance) versus pheromone number, and even the city transition rule, are all values that depend on how the user implements them. It is evident that a more careful consideration of these parameters produces substantially better results.
+
+In addition, the ACO family is also really diverse. Different arguments can be made for a global, versus a local, pheromone update rule. Moreover, it can also be modified with local search algorithms like \textbf{3-Opt}. This discussion is made by the original authors to great extent \cite{dorigo1997ant}.

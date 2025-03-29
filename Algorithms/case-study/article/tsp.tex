@@ -1,0 +1,49 @@
+% Describing the TSP section for the Final Essay of Math & Environment %
+% Author: Konstantinos Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Fri 28 Mar 2025 @ 14:07:01 +0100
+% Modified: Sat 29 Mar 2025 @ 13:01:19 +0100
+
+\section{What is the Travelling Salesman Problem?}
+\label{sec: tsp}
+
+The Travelling Salesman Problem, or TSP for short, simply asks the following questions:
+\vspace{3mm}
+
+\textit{"Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?"}
+
+\vspace{3mm}
+Through the formulation of this problem, it is evident that it is of great importance to logistics, route planning and resource management. Companies like Amazon, DHL and other mega-corporations that deliver millions of packages everyday, need to optimize their routes for efficiency and profit. In addition, variations of the TSP also have applications in data routing (moving data between servers), fiber optic network design, where the energy of light travelling down the cable decays over distance, and chip manufacturing (placement and wiring of electrical systems), where performance has to be maximum and noise almost inconsequential.
+
+\subsection{Graph Theory Preliminaries}
+In discrete mathematics, an \textbf{undirected} and \textbf{weighted graph} is nothing more than a pair of two collections \( G = (V, E) \). Here \( V \) is the set of vertices, which in this case represents the cities of a country, while \( E \) is the set of edges, or roads, that connect two cities. The term \textbf{undirected} means that roads point both ways, while \textbf{weighted} means that each edge is characterized by a number, which in this case is nothing more than the distance between two cities.
+
+Throughout this report, and for the simplicity of the case study, it is assumed that each city is connected by a road, an assumption that makes sense in a real-world scenario since no city is disconnected from the road network of a country. This property, in the literature, is also defined as \textbf{completeness}.
+
+It is worthwhile to mention that \textbf{non-completeness} doesn't influence the shortest tour of the graph, as long as its edges satisfy the triangle inequality,
+
+\[
+	\dist{(A, C)} \leq \dist{(A, B)} + \dist{(B, C)}
+\]
+which simply states that the roads connecting cities \( A, C \) are shorter or equal in length to roads connecting \(A, B\) and \(B, C\) combined.
+
+\subsection{Difficulty of the Travelling Salesman Problem}
+Since we have a \textbf{complete} and \textbf{weighted graph}, in order to find the shortest tour, we have to check each and every different road and compare their distances. Mathematics tells us that this requires \( (n-1)! \) time, where \( n \) the number of cities. This might sound trivial as a process, but for the sheer amount of roads we have to check in a real-world scenario, it quickly becomes infeasible. Table \ref{table: factorial_growth} showcases the factorial scaling of this problem, the main source of its difficulty.
+
+\begin{table}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline
+		\textbf{Number of cities}	&	\textbf{Number of Possible Tours} \\
+		\hline
+		\( 4 \)						&	\( 3! = 6 \)				\\
+		\( 10 \)					&	\( 9! = 363,880 \)			\\
+		\( 50 \)					&	\( 49! \approx 10^{64} \)	\\
+		\( n \)						&	\( (n-1)! \)				\\
+		\hline
+	\end{tabular}
+	\caption{Scaling of the Travelling Salesman Problem.}
+	\label{table: factorial_growth}
+\end{table}
+
+In this report, the Netherlands is the subject of the case study, which consists of 229 cities in total. If we were to try and solve this problem by using brute force, an eternity of running our most powerful supercomputer would not be enough to achieve the best solution of the TSP.

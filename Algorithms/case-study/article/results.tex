@@ -1,0 +1,67 @@
+% Results of the Final Essay for Math & Environment %
+% Author: Konstantinos Garas
+% E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
+% Created: Fri 28 Mar 2025 @ 16:05:36 +0100
+% Modified: Sat 29 Mar 2025 @ 13:48:13 +0100
+
+\section{Comparison of the Algorithms}
+\label{sec: results}
+The heuristic algorithms that were described in Section \ref{sec: heuristics} are now compared in terms of their performance for 30 randomly generated graphs of 229 cities, a size of which is equivalent to the size of the Netherlands. 
+
+Table \ref{table: nicknames} provided a legend for the nicknames of the algorithms in the figures, while figures \ref{fig: mean_distance}, \ref{fig: mean_uptime}, \ref{fig: min_distance} compare the algorithms in terms of \textit{mean distance, mean uptime, minimum distance achieved} respectively. Lastly, figure \ref{fig: compare_all} groups all the results together for a more cohesive view.
+
+\subsection{Technical Information}
+The algorithms were implemented in \texttt{Python 3.12.3} with the only materials to be used being the pseudo-codes in the original papers. Then, the case study was run in the Hábrók High Performance Computing cluster of the University of Groningen, over the period of 16 hours, with 5 processing cores working at 100\%. Due to the intense nature of the computations, I strongly recommend not to run these programs in a normal computer.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline
+		\textbf{Algorithm}	&	\textbf{Figure Name} \\
+		\hline
+		Nearest Neighbour  & NN \\
+		Baseline Genetic Algorithm	&	BGA	\\
+		Genetic Algorithm	&	GA	\\
+		Greedy Permuting Method	&	GPM	\\
+		Baseline Simulated Annealing	&	BSA	\\
+		Simulated Annealing	&	SA	\\
+		Baseline Ant Colony Optimization	&	BACO	\\
+		Ant Colony Optimization	&	ACO \\
+		\hline
+	\end{tabular}
+	\caption{Table of names used in the following figures.}
+	\label{table: nicknames}
+\end{table}
+
+\begin{itemize}
+	\item \textbf{Baseline GA, SA, ACO:} The results are generated without fine-tuning of the user-defined parameters\footnote{The Nearest Neighbour algorithm doesn't accept user defined parameters, and as such, it can't be fine-tuned}.
+	\item \textbf{GA, SA, ACO:} These algorithms have been fine-tuned in terms of the optimal output. Speed was entirely sacrificed in order to get the best possible final tour in each test.
+\end{itemize}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Extras/Comparison_Mean_Distance.png}
+	\caption{Comparison of the heuristic algorithms in terms of Mean Distance, after 30 randomly generated experiments. Fine-tuned Ant Colony Optimization produced the best results.}
+	\label{fig: mean_distance}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Extras/Comparison_Mean_Uptime.png}
+	\caption{Comparison of the Mean Uptime of the heuristic algorithms, after 30 randomly generated experiments. Here, NN is the fastest of all other choices by a large margin.}
+	\label{fig: mean_uptime}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Extras/Comparison_Min_Distance.png}
+	\caption{Comparison of the Minimum Distance achieved by the heuristic algorithms, after 30 randomly generated experiments. Once more, Ant Colony Optimization produced the best possible answer.}
+	\label{fig: min_distance}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Extras/Comparison_All.png}
+	\caption{A final figure showcasing the Mean Distance, and Mean Uptime achieved for each heuristic algorithm in the case study.}
+	\label{fig: compare_all}
+\end{figure}
