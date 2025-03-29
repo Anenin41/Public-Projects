@@ -5,7 +5,7 @@ This repository lists polished projects that I have completed, both during my st
 This folder contains the base files for the *Enhancing Black-Scholes Option Pricing: A Method of Moments Approach* report. The first draft of this work was done under the course of Model Reduction for Partial Differential Equations at the University of Groningen. Following the success that it had on the course, it was then slightly modified and polished to the form that it is today.
 
 ## Algorithms
-This folder contains all of the relevant files of the mathematical field of *Algorithms & Optimization*. In here, the main file of the Beamer presentation on the subject of the *Travelling Salesman Problem* can be found, my topic of choice for the final presentation of the course *Iterative Algorithms* at the University of Groningen.
+This folder contains all of the relevant files of the mathematical field of *Algorithms & Optimization*. In here, the main file of the Beamer presentation on the subject of the *Travelling Salesman Problem* can be found, my topic of choice for the final presentation of the course *Iterative Algorithms* at the University of Groningen. Moreover, the source files for the final report on the course of Mathematics & Environment are also present, a case study in which famous heuristic algorithms are compared in the Symmetric TSP.
 
 ## Fluids
 This folder contains everything that is relevant to the field of *Computational Fluid Dynamics*. In here, a Finite-Elements simulation of the stabilized **Navier-Stokes** equation can be found, an experiment that was run under the *Finite Element Methods & Applications* course in the University of Groningen. 
