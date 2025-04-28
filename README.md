@@ -18,3 +18,6 @@ In addition, various Finite-Difference methods are listed as well, also from my 
 
 ## Julia
 The Julia folder stands for projects that I have completed in the Julia Programming Language, but do not fit in the umbrella folders that are described above. The majority of them are personal projects, but since Julia is fast, an attempt is currently made to transfer code from other languages to this one for benchmarking purposes.
+
+## Python
+This folder lists short and long projects that I have completed in Python. Since this is a versatile language, many items are listed here, from quality of life pieces of code, to projects that I have implemented outside of academia.

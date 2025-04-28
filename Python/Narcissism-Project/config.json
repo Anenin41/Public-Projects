@@ -1,0 +1,7 @@
+{
+	"extract_data": true,
+	"analyse_data": true,
+	"global_search": false,
+	"local_search": true,
+	"merge_data": true
+}
