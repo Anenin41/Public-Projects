@@ -2,7 +2,7 @@
 # Author: Konstantine Garas
 # E-mail: kgaras041@gmail.com // k.gkaras@student.rug.nl
 # Created: Tue 21 Jan 2025 @ 18:02:45 +0100
-# Modified: Sun 02 Feb 2025 @ 21:50:12 +0100
+# Modified: Mon 28 Apr 2025 @ 13:20:39 +0200
 
 # Packages
 from fenics import *
@@ -133,20 +133,19 @@ def NSE(mu, rho, theta, dt, T, Re, R, ord=[2,1], backflow_stab=False, temam_stab
     print("Simulation completed successfully.")
 
 def main():
+    mu = 0.1
+    rho = 1.2
+    theta = 1.0
+    dt = 0.1
+    T = 1.0
+    Re = 36000.0
+    R = 5
+    ord1 = 1
+    ord2 = 1
+    backflow = True
+    temam = True
+    joint = True
     """ Simple CLI for Navier-Stokes Solver """
-    mu = float(input("Please give the viscocity value of the fluid: "))
-    rho = float(input("Please give the density value of the fluid: "))
-    theta = float(input("Please give the theta parameter to define explicit, semi-explicit, implicit time integration scheme: "))
-    dt = float(input("Please define an acceptable time step for the experiment: "))
-    T = float(input("Please define the total simulation uptime (seconds): "))
-    Re = float(input("Please give the Reynolds number: "))
-    R = float(input("Please give the inlet velocity parameter: "))
-    ord1 = int(input("Please define the piecewise polynomial element degree for the velocity space: "))
-    ord2 = int(input("Please define the piecewise polynomial element degree for the pressure space: "))
-    order = [ord1, ord2]
-    backflow = input("Do you want to penalize negative velocities at the outflow boundary by introducing backflow stabilization (y/n)? ").lower().strip() == "y"
-    temam = input("Do you want to introduce Temam stabilization, balancing out the excess numerical energy of the simulation (y/n)? ").lower().strip() == "y"
-    joint = input("Do you want to introduce pressure and convection stabilization, smoothing out numerical errors (y/n)? ").lower().strip() == "y"
     print("Running, this might take some time.")
     NSE(mu, rho, theta, dt, T, Re, R, ord=order, backflow_stab=backflow, temam_stab=temam, pressure_convection_stab=joint)
     print("Velocity and Pressure solutions stored in 'results/' folder. Visualize them using Paraview.")
