@@ -7,6 +7,8 @@ This folder contains the base files for the *Enhancing Black-Scholes Option Pric
 ## Algorithms
 This folder contains all of the relevant files of the mathematical field of *Algorithms & Optimization*. In here, the main file of the Beamer presentation on the subject of the *Travelling Salesman Problem* can be found, my topic of choice for the final presentation of the course *Iterative Algorithms* at the University of Groningen. Moreover, the source files for the final report on the course of Mathematics & Environment are also present, a case study in which famous heuristic algorithms are compared in the Symmetric TSP.
 
+In addition to these, there is also a Python pipeline to blur and deblur images, as well as a complete project on Gradient Descent Algorithms. Many more are scheduled to come as well!
+
 ## Fluids
 This folder contains everything that is relevant to the field of *Computational Fluid Dynamics*. In here, a Finite-Elements simulation of the stabilized **Navier-Stokes** equation can be found, an experiment that was run under the *Finite Element Methods & Applications* course in the University of Groningen. 
 
